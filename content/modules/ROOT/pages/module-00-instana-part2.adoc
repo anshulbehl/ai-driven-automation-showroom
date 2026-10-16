@@ -25,7 +25,7 @@ After completing this module, you will be able to:
 Before starting, confirm:
 
 * You can log in to the Instana UI with the credentials from Section 1.1
-* You can log in to link:{controller_url}[Ansible Automation Platform^] as `{controller_username}`
+* You can log in to link:{controller_url}[Ansible Automation Platform^] as `{controller_username}` / `{controller_password}` (click the **AAP** tab in the right-hand lab interface)
 * Your service `lab-webapp-{guid}` appears in the Instana Services tab and is receiving calls
 
 [IMPORTANT]
@@ -83,6 +83,11 @@ Path 1 depends on a rulebook activation that is already running for you.
 
 image::instana_eda_activation_running.png[Instana AIOps rulebook activation running, link="_images/instana_eda_activation_running.png", window=blank]
 
+[NOTE]
+====
+**What is a Rulebook Activation?** A rulebook activation is a long-running listener managed by Event-Driven Ansible. It watches for incoming events — in this case, webhook payloads from Instana — and evaluates them against a set of rules. When an event matches a rule's conditions, the activation automatically triggers the corresponding action, such as launching a Job Template. Think of it as an always-on "if this, then that" for your automation platform.
+====
+
 This activation runs the `instana.yml` rulebook, which listens for webhooks on port 5000 and acts only on events where `issue.state` is `OPEN`.
 
 Your webhook URL is:
@@ -91,8 +96,6 @@ Your webhook URL is:
 ----
 {eda_webhook_url}
 ----
-
-Copy it. You need it in the next step.
 
 [NOTE]
 ====
@@ -103,8 +106,8 @@ The listener runs inside Ansible Automation Platform as a rulebook activation, n
 
 An alert channel tells Instana where to send a notification when an alert fires. Create it now, because you will attach it to the Smart Alert in the next step.
 
-. In the Instana UI, click **Settings** in the left navigation menu
-. Navigate to **Alerting** -> **Alert Channels**
+. In the Instana UI, click **Settings** (gear icon) in the left navigation menu
+. Under **Events & alerts**, click **Alert Channels**
 
 image::instana_settings_alerting.png[Instana Alerting Settings, link="_images/instana_settings_alerting.png", window=blank]
 
@@ -148,26 +151,27 @@ Instana does not let you attach a Smart Alert directly to a service. Smart Alert
 
 === Stage 1: Create your Application Perspective
 
-An Application Perspective is a scoped view of one or more services. Yours will contain a single service, `lab-webapp-{guid}`. You will build it in this order: pick the call type, filter down to your service with a filter you type by hand, and name it last.
+An Application Perspective is a scoped view of one or more services. Yours will contain a single service, `lab-webapp-{guid}`. In the wizard, select the model, filter to your service, exclude downstream services, name the perspective, then choose inbound calls.
 
 . In the Instana UI, click **Applications** in the left navigation menu
-. Click the large blue **+** button (Add) and choose **Add Application Perspective**
-. For the call type, select **Calls for this application** — the inbound calls arriving at your services — then click **Next**
-. Add a service filter: click **Add filter**, select **service.name**, and type `lab-webapp-{guid}`
-
+. Click the blue **+ ADD** button in the **bottom-right corner** of the screen and choose **Add Application Perspective**
+. The wizard opens at **Step 1: Select model** — _"What kind of application would you like to model?"_ Leave the default **Services or endpoints** selected and click **Next**
+. On **Step 2: Specify application**, click **Add filter**, select **service.name**, and type `lab-webapp-{guid}`
++
 [IMPORTANT]
 ====
 Type the full service name into the filter field — do not pick from the dropdown. The dropdown does not list every service in this shared instance, and `lab-webapp-{guid}` may not appear in it. Typing the complete name is what makes your service show up in the filter results.
 ====
-
-. Confirm the preview shows your service: `lab-webapp-{guid}`
-. Name the Application Perspective:
+. Confirm your service appears under **Matched services in the last hour** on the right side of the dialog
+. Under **Which downstream services would you like to include?**, leave **No downstream services** selected
+. Click **Next**
+. On **Step 3: Provide details**, name the Application Perspective:
 +
 [source, text, subs="attributes+"]
 ----
 lab-webapp-{guid}
 ----
-+
+. Under **Are you interested just in the calls to this application, or also the internal calls?**, leave **Inbound calls** selected
 . Click **Create** to save the Application Perspective
 
 image::instana_application_perspective.png[Application Perspective, link="_images/instana_application_perspective.png", window=blank]
@@ -179,7 +183,7 @@ Your filter must match only `lab-webapp-{guid}`. Every student's Flask service i
 
 [IMPORTANT]
 ====
-Name the Application Perspective exactly `lab-webapp-{guid}` — the same name as the service. Event-Driven Ansible identifies your environment by the `entityLabel` field of the alert payload, which is the Application Perspective name. The rulebook strips the `lab-webapp-` prefix from it to build the job template name, so any other name (for example `{guid} Web App`) produces a template name that does not exist and the automated restore will not launch.
+Name the Application Perspective `lab-webapp-{guid}` so you can find it in the shared instance. For the **Per service** Smart Alert scope used below, the webhook's `issue.entityLabel` is the affected service name, `lab-webapp-{guid}`. The rulebook strips `lab-webapp-` from that service name to find your job template. The perspective title itself does not determine the template name. The screenshot above uses an older sample title, `wj8z2 Web App`; follow the naming convention in these steps for your new perspective.
 ====
 
 Allow a short time for the Application Perspective to populate with data before continuing.
@@ -190,51 +194,97 @@ Allow a short time for the Application Perspective to populate with data before 
 . Go to its **Smart Alerts** tab
 . Click **Create Smart Alert**
 . Switch the alert to **Advanced mode** — the default Simple mode hides the threshold and time settings you need
-. Select **Throughput** as the alert type, then choose the **Calls** metric
-. In the time threshold settings, change the evaluation times to **1 minute** each, so the metric is evaluated in one minute windows
-. Set the **Grace period** to **1 minute**
-. Configure the condition:
+
+Configure the Smart Alert using the sections below. Each heading corresponds to a section in the wizard.
+
+==== Selected blueprint
 
 [cols="2,3", options="header"]
 |===
-| Field
-| Value
+| Field | Value
+
+| Blueprint
+| **Throughput**
+|===
+
+==== Scope: Where is the condition happening?
+
+[cols="2,3", options="header"]
+|===
+| Field | Value
+
+| Scope
+| **Per service for this application perspective** (middle option)
+
+| Inbound calls
+| Toggled on
+
+| Application Perspective
+| `lab-webapp-{guid}`
+|===
+
+==== Threshold: When is the condition violated?
+
+[cols="2,3", options="header"]
+|===
+| Field | Value
+
+| Threshold metric
+| **Calls** appears automatically after selecting **Throughput**; there is no separate metric toggle
+
+| Operator
+| `<`
+
+| Threshold type
+| **Static threshold**
+
+| Warning
+| Unchecked
+
+| Critical
+| Checked, value `1`
+|===
+
+The Critical condition is calls `< 1`. Instana sends the webhook after that condition persists for the time configured below.
+
+==== Time threshold: When do you want to be alerted?
+
+[cols="2,3", options="header"]
+|===
+| Field | Value
+
+| Mode
+| **When the condition persists over a specified amount of time**
+
+| Evaluation granularity
+| **1 min**
+
+| Number of consecutive metric violations
+| **1**
+
+| Grace period
+| **1 minute**
+|===
+
+Set the **1 min** evaluation granularity and **1** consecutive violation first. Together, they mean the condition must persist for one minute before the alert fires. Then set the grace period to **1 minute**; if that choice is unavailable, check the persistence settings again.
+
+==== Alert name and channel
+
+[cols="2,3", options="header"]
+|===
+| Field | Value
 
 | Alert Name
 | `{guid} Service Down - Calls Drop`
-
-| Mode
-| Advanced
-
-| Alert type
-| Throughput
-
-| Metric
-| Calls
-
-| Threshold times
-| 1 minute each
-
-| Grace period
-| 1 minute
-
-| Condition operator
-| `<`
-
-| Critical threshold
-| `< 1`
 
 | Alert Channel
 | `AIOps Automated Remediation - {guid}`
 |===
 
-The critical threshold of `< 1` is what arms the automation: as soon as calls fall below one per minute, the alert fires and the webhook goes out.
-
 image::instana_smart_alert_config.png[Smart Alert Configuration, link="_images/instana_smart_alert_config.png", window=blank]
 
-[start=9]
-. Attach the alert channel `AIOps Automated Remediation - {guid}` that you created in Step 3
-. Review the configuration and save the alert
+[start=5]
+. Review the configuration and click **Create** to save the alert
 
 [IMPORTANT]
 ====
@@ -252,7 +302,8 @@ The saved alert may be displayed under a generic default title. That label is co
 
 Instana polls Ansible Automation Platform with a dedicated read and execute account and imports the job templates that account can see. Those imported templates become **actions**.
 
-. In the Instana UI, open the **Action Catalog**
+. In the Instana UI, click **Automation** in the left navigation menu
+. Click **Action Catalog**
 . Search for `{guid}`
 
 image::instana_action_catalog_list.png[Action Catalog List, link="_images/instana_action_catalog_list.png", window=blank]
@@ -272,7 +323,7 @@ Break the service and let Event-Driven Ansible repair it without you.
 
 === Note your healthy baseline
 
-. In Instana, open **Services** -> `lab-webapp-{guid}`
+. In Instana, navigate to **Applications** -> **Services** -> `lab-webapp-{guid}`
 . Note the current **Calls** rate — a steady stream of requests from the traffic generator
 . This is what healthy looks like. You will compare against it after the outage and again after recovery
 
@@ -301,7 +352,7 @@ The job stops `lab-webapp.service` on `node2`. The Flask application stops answe
 
 === Watch the calls drop
 
-. Switch to Instana, open **Services** -> `lab-webapp-{guid}`
+. Switch to Instana, navigate to **Applications** -> **Services** -> `lab-webapp-{guid}`
 . Compare the graph against the healthy baseline you noted at the start of this exercise
 . Watch the **Calls** metric fall to zero within a few seconds
 
@@ -349,7 +400,7 @@ The job starts `lab-webapp.service` on `node2` and verifies the health endpoint 
 
 === Confirm recovery in Instana
 
-. Return to Instana, **Services** -> `lab-webapp-{guid}`
+. Return to Instana, navigate to **Applications** -> **Services** -> `lab-webapp-{guid}`
 . The **Calls** metric climbs back to its normal level as the traffic generator succeeds again
 . After a few minutes above threshold — the 1 minute grace period plus evaluation time — the incident closes automatically and the state becomes **CLOSED**
 

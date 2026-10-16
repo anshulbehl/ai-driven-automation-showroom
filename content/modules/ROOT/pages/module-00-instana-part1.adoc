@@ -143,7 +143,7 @@ The **Services** tab lists monitored applications and their performance metrics.
 
 ==== Exploring your service
 
-. Click **Services** in the left navigation menu
+. Click **Applications** in the left navigation menu, then click **Services**
 . Search for `{guid}` to filter the list down to your own service
 . Click `lab-webapp-{guid}` to open its details
 
@@ -174,10 +174,10 @@ The Python Instana SDK is loaded by the Flask application, so these traces are p
 Smart Alerts monitor a service and raise an incident when its behaviour changes. In this lab we use a Smart Alert on the **Throughput** (calls) metric:
 
 * **Metric**: calls (throughput)
-* **Condition**: operator `<` with the **Critical** threshold set to `< 1` call per minute, which means the service has stopped serving traffic
-* **Time threshold**: evaluation windows of 1 minute each
-* **Grace period**: 1 minute, so the incident closes shortly after traffic resumes
-* **Scope**: an Application Perspective containing only your service, `lab-webapp-{guid}`
+* **Condition**: operator `<`, **Critical** enabled with numeric value `1`, and **Warning** disabled; the condition is calls below one per minute
+* **Time threshold**: a 1-minute evaluation window and one consecutive violation (1 minute of persistence)
+* **Grace period**: 1 minute after persistence is set, so the incident closes shortly after traffic resumes
+* **Scope**: **Per service for this application perspective**, with the Application Perspective containing only `lab-webapp-{guid}`
 * **Channel**: a generic webhook pointing at your Event-Driven Ansible listener
 
 [NOTE]
