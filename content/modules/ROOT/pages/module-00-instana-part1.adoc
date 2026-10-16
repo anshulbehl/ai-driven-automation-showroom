@@ -111,7 +111,7 @@ Everything you create must be named with your own `{guid}` so you can find it ag
 
 . Open the Instana URL above in a new browser tab
 . Log in with the credentials provided by your instructor
-. The **Infrastructure** map opens as the default view
+. Click **Infrastructure** in the left navigation to open the map
 
 == Understanding Instana Components
 
@@ -266,7 +266,7 @@ Instana posts the alert to a webhook. The **Instana AIOps** rulebook activation 
             instana_alert_state: "{{ event.payload.issue.state }}"
 ----
 
-Note how the template name is built at runtime from `entityLabel`. That is what keeps one shared rulebook working for every student at once: your alert can only ever launch your own job template.
+Note how the template name is built at runtime from `entityLabel`. With your service named `lab-webapp-{guid}`, the shared rulebook routes its alert to the restore template containing your `{guid}`. This naming convention is not an access-control check; keep your service and alert scoped to your own GUID.
 
 **Strengths**: fastest possible response, no human in the loop, predictable for well-understood failures.
 

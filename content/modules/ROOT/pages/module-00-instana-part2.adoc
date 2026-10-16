@@ -88,7 +88,7 @@ image::instana_eda_activation_running.png[Instana AIOps rulebook activation runn
 **What is a Rulebook Activation?** A rulebook activation is a long-running listener managed by Event-Driven Ansible. It watches for incoming events — in this case, webhook payloads from Instana — and evaluates them against a set of rules. When an event matches a rule's conditions, the activation automatically triggers the corresponding action, such as launching a Job Template. Think of it as an always-on "if this, then that" for your automation platform.
 ====
 
-This activation runs the `instana.yml` rulebook, which listens for webhooks on port 5000 and acts only on events where `issue.state` is `OPEN`.
+This activation runs the `instana.yml` rulebook, which listens for webhooks on port 5000. An `OPEN` issue launches remediation; a `CLOSED` issue records recovery without launching another job.
 
 Your webhook URL is:
 
@@ -99,7 +99,7 @@ Your webhook URL is:
 
 [NOTE]
 ====
-The listener runs inside Ansible Automation Platform as a rulebook activation, not as a service you manage on the bastion. To inspect what it has received, open the **Instana AIOps** activation and use its **History** tab rather than looking for logs over SSH.
+The listener runs inside Ansible Automation Platform as a rulebook activation, not as a service you manage on the bastion. Use **Automation Decisions** -> **Rule Audit** to inspect events that matched a rule and the resulting actions. The activation's **History** tab shows activation runs and their output.
 ====
 
 == Step 3: Create a Generic Webhook Alert Channel in Instana
@@ -137,7 +137,7 @@ image::instana_webhook_channel_config.png[Webhook Channel Configuration, link="_
 
 [TIP]
 ====
-Click **Test channel** to prove connectivity. The activation **History** in Ansible Automation Platform will show the event arriving.
+Click **Test channel** to check webhook connectivity. Check the result in Instana. This test does not match the rulebook, so do not expect a Rule Audit entry or a remediation job.
 
 No job will launch, and that is expected. The test payload is a `change` event with no `state` field, so it cannot satisfy the rulebook condition `issue.state == "OPEN"`. Only a genuine firing alert launches remediation.
 ====
@@ -268,18 +268,17 @@ The Critical condition is calls `< 1`. Instana sends the webhook after that cond
 
 Set the **1 min** evaluation granularity and **1** consecutive violation first. Together, they mean the condition must persist for one minute before the alert fires. Then set the grace period to **1 minute**; if that choice is unavailable, check the persistence settings again.
 
-==== Alert name and channel
+==== Alert channels
 
-[cols="2,3", options="header"]
-|===
-| Field | Value
+Under **Alert channels**, select `AIOps Automated Remediation - {guid}` for the Critical alert. This is the Generic Webhook channel you created in Step 3.
 
-| Alert Name
-| `{guid} Service Down - Calls Drop`
+==== Properties
 
-| Alert Channel
-| `AIOps Automated Remediation - {guid}`
-|===
+Under **Properties**, set the alert title to `{guid} Service Down - Calls Drop`. Leave the other properties at their defaults.
+
+==== Payloads
+
+Leave **Payloads** at its defaults. The standard Smart Alert webhook payload already contains the issue fields the rulebook needs.
 
 image::instana_smart_alert_config.png[Smart Alert Configuration, link="_images/instana_smart_alert_config.png", window=blank]
 
@@ -345,7 +344,7 @@ image::aap_break_template.png[Break Template, link="_images/aap_break_template.p
 
 [IMPORTANT]
 ====
-The limit is required. These templates run against the shared lab inventory, and the limit is what confines the play to your own application host. Launching without it targets more hosts than intended.
+The limit is required. Your job template uses your lab inventory; `node2` confines the play to your application host. Launching without it can target other hosts in your own inventory.
 ====
 
 The job stops `lab-webapp.service` on `node2`. The Flask application stops answering, and the traffic generator on the bastion starts failing its health checks.
@@ -380,21 +379,20 @@ The alert reliably fires on this second attempt once the metric has a fresh base
 === Confirm Event-Driven Ansible received the webhook
 
 . In Ansible Automation Platform, navigate to **Automation Decisions** -> **Rulebook Activations**
-. Find **Instana AIOps** in the list and check its **fire count** — it has incremented by 1 for the event that just matched
-. Open **Instana AIOps**
-. Open the **History** tab to see the received event and the rule that matched
+. Find **Instana AIOps** in the list and check that its **fire count** has increased. Both opening and closing alerts can match rules, so the count may rise again after recovery
+. Navigate to **Automation Decisions** -> **Rule Audit** and find the `OPEN` event for your `lab-webapp-{guid}` service. Open it to inspect the matched rule and action
 
 The rulebook extracts `{guid}` from the `entityLabel` field of the payload and launches the matching restore template.
 
 === Watch the restore job run
 
 . Navigate to **Automation Execution** -> **Jobs**
-. A job named `INSTANA | {guid} | Restore Web App Service - Fix anomalously low calls` should be running, launched by automation rather than by you
+. Find the latest `INSTANA | {guid} | Restore Web App Service - Fix anomalously low calls` job launched by automation. It may already show **Successful**, or it may still be **Running**
 
 image::aap_restore_job_auto_triggered.png[Auto-Triggered Restore Job, link="_images/aap_restore_job_auto_triggered.png", window=blank]
 
 [start=3]
-. Open the job and wait for it to finish
+. Open the job, inspect its output, and wait for **Successful** if it is still running
 
 The job starts `lab-webapp.service` on `node2` and verifies the health endpoint responds.
 
@@ -406,7 +404,7 @@ The job starts `lab-webapp.service` on `node2` and verifies the health endpoint 
 
 image::instana_calls_restored.png[Calls Restored, link="_images/instana_calls_restored.png", window=blank]
 
-The rulebook also matches `CLOSED` events and logs the recovery, which you can see in the activation history.
+The rulebook also matches `CLOSED` events and logs the recovery. Check **Automation Decisions** -> **Rule Audit** for the recovery event.
 
 You have completed Path 1. The sequence was:
 
@@ -440,7 +438,7 @@ Re-enable the **Instana AIOps** activation when you finish this exercise. Later 
 
 Repeat the break step from Exercise 1: launch `INSTANA | {guid} | Break Web App Service - Simulate low calls outage` with the limit `node2`.
 
-Wait for the Smart Alert to open in Instana as before. This time nothing repairs it, because the webhook has nowhere to go.
+Wait for the Smart Alert to open in Instana as before. This time nothing repairs it, because the rulebook activation is disabled and cannot process the webhook.
 
 === Read the recommended action
 
@@ -484,7 +482,7 @@ image::instana_action_run.png[Run action prompt with committed host limit, link=
 
 [IMPORTANT]
 ====
-**Press Enter after typing the host limit.** The limit only takes effect once it is committed as its own entry in the field. If you type `node2` and move on without pressing Enter, the limit is silently ignored and the job template runs on **all hosts** in the inventory — including other students' nodes.
+**Press Enter after typing the host limit.** The limit only takes effect once it is committed as its own entry in the field. If you type `node2` and move on without pressing Enter, the limit is silently ignored and the job template can run on **all hosts in your own lab inventory**. Check that the `node2` entry appears before running the action.
 ====
 
 === Restore the service
