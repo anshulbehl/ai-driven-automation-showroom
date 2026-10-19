@@ -30,7 +30,7 @@ Before starting, confirm:
 
 [IMPORTANT]
 ====
-Instana is shared with every other student in this workshop. Name the alert channel, Application Perspective, and Smart Alert you are about to create with your own `{guid}`, exactly as shown. Do not modify or delete objects belonging to another `{guid}`.
+Instana is shared with every other student in this workshop. Name the alert channel, Application Perspective, and Smart Alert you are about to create with your own `{guid}`, exactly as shown. Do not modify or delete objects belonging to other students, or any object that does not carry your own `{guid}`.
 ====
 
 == Step 1: Review Your Ansible Job Templates

@@ -104,7 +104,7 @@ Both paths end in the same place: a job template in Ansible Automation Platform.
 ====
 This Instana instance is **shared across all students in this workshop**. Every participant logs in with the same account and sees the same infrastructure map, service list, and Action Catalog.
 
-Everything you create must be named with your own `{guid}` so you can find it again, and so you do not disturb anyone else. Do not delete or modify alerts, channels, or actions that belong to another `{guid}`.
+Everything you create must be named with your own `{guid}` so you can find it again, and so you do not disturb anyone else. Do not delete or modify alerts, channels, or actions belonging to other students, or any that do not carry your own `{guid}`.
 ====
 
 === Step 1: Log Into Instana
