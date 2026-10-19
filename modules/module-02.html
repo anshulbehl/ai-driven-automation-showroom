@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Section 2.2 - Remediation Workflow :: Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</title>
+    <link rel="canonical" href="https://github.com/rhpds/showroom_template_nookbag/modules/module-02.html">
+    <link rel="prev" href="module-01.html">
+    <link rel="next" href="module-06.html">
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://demo.redhat.com" target="_blank" style="margin-left: 5%;">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008.5 178.739" style="width: 200px;"><g fill="#fff"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#fff"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#e00" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">One</tspan></text></svg>
+      </a>
+      <a class="navbar-item site-title" target="__blank" style="color: #fff !important;" href="https://github.com/rhpds/showroom_template_nookbag">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item navbar-item-right-dropdown has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Links</a>
+          <div class="navbar-dropdown navbar-dropdown-right">
+            <a class="navbar-item navbar-item-right-content" href="https://redhat.com" target="_blank">Red Hat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="modules" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 1: IBM Instana Observability and Intelligent Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part2.html">1.2 Smart Alerts and Dual-Path Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 2: AIOps with Apache Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-01.html">2.1 Log Enrichment and Prompt Generation Workflow</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="module-02.html">2.2 Remediation Workflow</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 3: AIOps with Windows Automation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-06.html">3. Windows Events and AI-Driven Ticketing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 4: Red Hat Lightspeed and Agentic IDE Workflow</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 5: AI-Driven Incident Response</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-09.html">5. AI Agents and AAP via MCP</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-10.html">Summary and Call to Actions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Dev Mode</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-03.html">Section 2.1 - Splunk for Network Observability</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-04.html">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-05.html">Section 2.3 - Network Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-08.html">Autonomous AIOps: Self-Healing RHEL with Splunk</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="attrs-page.html">Attributes Page</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></li>
+    <li>Section 2: AIOps with Apache Remediation</li>
+    <li><a href="module-02.html">2.2 Remediation Workflow</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Section 2.2 - Remediation Workflow</h1>
+<div class="sect1">
+<h2 id="_objective"><a class="anchor" href="#_objective"></a>Objective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this section, we will build another workflow called the <strong>Remediation Workflow</strong>. The goal for this workflow is to take the information we learned from Section 1 with Red Hat AI and now prompt Automation coding assistant to automatically create an Ansible Playbook to fix the issue. By combining these two workflows, we can create an AIOps workflow capable of self-healing infrastructure.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow.png" target="blank"><img src="_images/remediation_workflow.png" alt="remediation_workflow"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>By separating these two parts into distinct workflows, we allow for manual review of the response from Red Hat AI and can take corrective action if necessary. This creates a natural stopping point in our automation workflow where we can ensure the automation is performing as expected.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+⚠️ Before we get started you need to make sure you have run the first workflow.
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+⚠️ Reminder that the way we purposely broke httpd with the <strong>❌ Break Apache</strong> Job Template was by inserting <strong>InvalidDirectiveHere</strong> into the configuration file and restarting the service.  This crashed the httpd service as you can see by running the <strong>systemctl status httpd.service</strong> Linux command.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learning_objectives"><a class="anchor" href="#_learning_objectives"></a>Learning Objectives</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After completing this module, you will be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Build a remediation workflow using AI-generated prompts</p>
+</li>
+<li>
+<p>Use Automation coding assistant to automatically generate remediation playbooks</p>
+</li>
+<li>
+<p>Commit AI-generated playbooks to source control (Gitea)</p>
+</li>
+<li>
+<p>Review and validate AI-generated automation code before execution</p>
+</li>
+<li>
+<p>Execute automated remediation to fix service failures</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_verify_webserver_failure"><a class="anchor" href="#_verify_webserver_failure"></a>Verify webserver failure</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Connect to your bastion host either via SSH or Visual Studio Code.  The connection information is provided by your instructor.</p>
+</li>
+<li>
+<p>SSH over to node1</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[lab-user@bastion ~]$ sudo ssh node1
+Last login: Tue Apr  8 15:56:41 2025 from 192.168.0.37
+[ec2-user@node1 ~]$</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Verify httpd is down with the <strong>systemctl status httpd.service</strong> command</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[ec2-user@node1 ~]$ sudo systemctl status httpd.service
+× httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; preset: disabled)
+     Active: failed (Result: exit-code) since Tue 2025-04-08 15:56:15 UTC; 1h 11min ago
+   Duration: 1min 9.506s
+       Docs: man:httpd.service(8)
+    Process: 4099 ExecStart=/usr/sbin/httpd $OPTIONS -DFOREGROUND (code=exited, status=1/FAILURE)
+   Main PID: 4099 (code=exited, status=1/FAILURE)
+     Status: "Reading configuration..."
+        CPU: 58ms
+
+Apr 08 15:56:15 node1.example.com systemd[1]: Starting The Apache HTTP Server...
+Apr 08 15:56:15 node1.example.com httpd[4099]: AH00526: Syntax error on line 35 of /etc/httpd/conf/httpd.conf:
+Apr 08 15:56:15 node1.example.com httpd[4099]: Invalid command 'InvalidDirectiveHere', perhaps misspelled or defined by a module not included in the server configuration
+Apr 08 15:56:15 node1.example.com systemd[1]: httpd.service: Main process exited, code=exited, status=1/FAILURE
+Apr 08 15:56:15 node1.example.com systemd[1]: httpd.service: Failed with result 'exit-code'.
+Apr 08 15:56:15 node1.example.com systemd[1]: Failed to start The Apache HTTP Server.
+[ec2-user@node1 ~]$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see in the above output, the httpd.service has failed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_remediation_workflow"><a class="anchor" href="#_create_remediation_workflow"></a>Create Remediation Workflow</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Log in to the web UI for Ansible Automation Platform if you are not already logged in.</p>
+</li>
+<li>
+<p>In the left navigation menu, click on <strong>Automation Execution</strong> → <strong>Templates</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/automation_execution_templates.png" target="blank"><img src="_images/automation_execution_templates.png" alt="automation_execution_templates"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Navigate to the Templates page and select the <strong>Remediation Workflow</strong> Workflow job template</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_list.png" target="blank"><img src="_images/remediation_workflow_list.png" alt="create_workflow"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 The last workflow (specifically the job template <strong>Build Ansible Lightspeed Job Template</strong>) used the <strong>ansible.controller.workflow_job_template</strong> module to automatically create this blank workflow. We could have Ansible automatically create the entire workflow but we want to illustrate each part and what it is doing.  The most important part is that Ansible automatically created a survey with output from Red Hat AI.  You will see this called out below when we run the workflow.  Ask your instructor if you need clarification.
+</blockquote>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Click on the blue <strong>View workflow visualizer</strong> button</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/view_workflow_visualizer_button.png" target="blank"><img src="_images/view_workflow_visualizer_button.png" alt="visualizer_button" width="300"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="5">
+<li>
+<p>Verify you have a window that looks like this:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/currently_no_nodes_workflow.png" target="blank"><img src="_images/currently_no_nodes_workflow.png" alt="currently_no_nodes_workflow" width="400"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="6">
+<li>
+<p>Click on the blue <strong>Add step</strong></p>
+</li>
+<li>
+<p>Fill out the following values</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">🧠 Lightspeed Remediation Playbook Generator</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convergence</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node alias</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(You can leave this blank)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/add_step_lightspeed_remediation.png" target="blank"><img src="_images/add_step_lightspeed_remediation.png" alt="add_step_lightspeed_remediation" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="8">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="9">
+<li>
+<p>Review and click the blue <strong>Finish</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Your workflow will now look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_one.png" target="blank"><img src="_images/remediation_workflow_part_one.png" alt="remediation_workflow_part_one" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>Click on the three dots (kebab menu) next to the <strong>🧠 Lightspeed Remediation Playbook Generator</strong> node</p>
+</li>
+<li>
+<p>Click on <strong>⊕ Add step and link</strong></p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_add_step_and_link.png" target="blank"><img src="_images/workflow_add_step_and_link.png" alt="workflow_add_step_and_link" width="200"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="12">
+<li>
+<p>Fill out the following values</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">🧾 Commit Fix to Gitea</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run on success</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convergence</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node alias</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(You can leave this blank)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_two.png" target="blank"><img src="_images/remediation_workflow_part_two.png" alt="remediation_workflow_part_two" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="13">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="14">
+<li>
+<p>Review and click the blue <strong>Finish</strong> button</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Your workflow will now look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_two_final.png" target="blank"><img src="_images/remediation_workflow_part_two_final.png" alt="remediation_workflow_part_two_final" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="15">
+<li>
+<p>Click on the three dots (kebab menu) next to the <strong>🧾 Commit Fix to Gitea</strong> node</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>16 Click on <strong>⊕ Add step and link</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_add_step_and_link.png" target="blank"><img src="_images/workflow_add_step_and_link.png" alt="workflow_add_step_and_link" width="200"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="17">
+<li>
+<p>Fill out the following values</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Project Sync</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lightspeed-Playbooks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run on success</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convergence</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node alias</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(You can leave this blank)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_three.png" target="blank"><img src="_images/remediation_workflow_part_three.png" alt="remediation_workflow_part_three" width="500"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+⚠️ Notice this node type is different.  This is a <strong>built-in</strong> node type that will force a <strong>Project Sync</strong> to the repository that will hold our auto-generated Ansible Playbooks.  This is effectively a <strong>git pull</strong>  The previous node: <strong>🧾 Commit Fix to Gitea</strong>  synced the Ansible Playbook from Automation coding assistant to Gitea, now we are retrieving that playbook from Gitea to use in Ansible Automation Platform.
+</blockquote>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="18">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="19">
+<li>
+<p>Review and click the blue <strong>Finish</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Your workflow will now look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_three_final.png" target="blank"><img src="_images/remediation_workflow_part_three_final.png" alt="remediation_workflow_part_three_final" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="20">
+<li>
+<p>Click on the three dots (kebab menu) next to the <strong>🧠 Lightspeed-Playbooks</strong> node</p>
+</li>
+<li>
+<p>Click on <strong>⊕ Add step and link</strong></p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_add_step_and_link.png" target="blank"><img src="_images/workflow_add_step_and_link.png" alt="workflow_add_step_and_link" width="200"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="22">
+<li>
+<p>Fill out the following values</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job Template</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">⚙️ Build HTTPD Remediation Template</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run on success</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convergence</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Node alias</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(You can leave this blank)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_four.png" target="blank"><img src="_images/remediation_workflow_part_four.png" alt="remediation_workflow_part_four" width="500"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="23">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="24">
+<li>
+<p>Review and click the blue <strong>Finish</strong> button</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Your workflow will now look like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_part_four_final.png" target="blank"><img src="_images/remediation_workflow_part_four_final.png" alt="remediation_workflow_part_four_final" width="500"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You are now done creating the workflow!</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="25">
+<li>
+<p>Click on the blue <strong>Save</strong> button at the top.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/save_button.png" target="blank"><img src="_images/save_button.png" alt="save_button" width="150"></a>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verify_workflow_structure"><a class="anchor" href="#_verify_workflow_structure"></a>Verify workflow structure</h3>
+<div class="paragraph">
+<p>Before launching the workflow, confirm it&#8217;s built correctly:</p>
+</div>
+<div class="paragraph">
+<p>✅ <strong>Expected result:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Workflow named "Remediation Workflow" exists</p>
+</li>
+<li>
+<p>Workflow contains 4 nodes in sequence:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>🧠 Lightspeed Remediation Playbook Generator</p>
+</li>
+<li>
+<p>🧾 Commit Fix to Gitea</p>
+</li>
+<li>
+<p>Lightspeed-Playbooks (Project Sync)</p>
+</li>
+<li>
+<p>⚙️ Build HTTPD Remediation Template</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>All nodes connected with "Run on success"</p>
+</li>
+<li>
+<p>Workflow is saved and ready to execute</p>
+</li>
+</ul>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="26">
+<li>
+<p>Exit out of the Workflow Visualizer by clicking the <strong>x</strong> at the top right</p>
+</li>
+<li>
+<p>Click the <strong>🚀 Launch template</strong> button to execute the <strong>Remediation Workflow</strong></p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/launch_template_button.png" target="blank"><img src="_images/launch_template_button.png" alt="launch_template_button" width="150"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 This is the really cool part!  A survey prompt will appear with two text boxes side-by-side:
+</blockquote>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Left text box (required field with red asterisk *)</strong>: This is where you enter the prompt that will be sent to Automation coding assistant to generate the remediation playbook. This field is currently pre-populated with a manually crafted prompt created by the Ansible Tech Marketing team.</p>
+</li>
+<li>
+<p><strong>Right text box (AI-generated suggestion)</strong>: This contains the prompt that was automatically generated by Red Hat AI during the previous workflow based on its analysis of the Apache failure logs.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You have the flexibility to use either prompt. If you&#8217;re satisfied with the AI-generated prompt on the right, you can copy and paste it into the left box to test the AI&#8217;s solution. <strong>This is the key benefit of separating AIOps into two workflows</strong> - it gives you (the administrator) the ability to review and validate AI-generated responses for accuracy before proceeding with automated remediation!</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_prompt.png" target="blank"><img src="_images/workflow_prompt.png" alt="workflow_prompt"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="28">
+<li>
+<p>Review the AI-generated prompt (right side) and update the required field (left side with the red asterisk *) as needed. Feel free to copy and paste from the right side to the left side.</p>
+</li>
+</ol>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Why this matters</strong>: This step allows you to course-correct any output that AI has provided. You can review what the AI suggests before prompting Automation coding assistant, ensuring the prompt is accurate and appropriate for your environment. This human-in-the-loop validation is a best practice for AI-driven automation.
+</blockquote>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="29">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="29">
+<li>
+<p>Review and click the blue <strong>Finish</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="30">
+<li>
+<p>Wait for the workflow to complete</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>When the workflow completes you will see a green ✅ Success</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/remediation_workflow_success.png" target="blank"><img src="_images/remediation_workflow_success.png" alt="remediation_workflow_success" width="150"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+🎉 You have used Ansible Automation Platform in an AIOps workflow to automatically create an Ansible Job Template to fix your issue. This has created an Ansible Job Template called <strong>🔧✅ Execute HTTPD Remediation</strong>. You could also add this to the workflow, but it might be another natural breakpoint where you schedule this job template during an approved change window. For example, some organizations might only want to apply changes to production servers on Sundays at 3AM.
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_review_the_ai_generated_playbook_in_gitea"><a class="anchor" href="#_review_the_ai_generated_playbook_in_gitea"></a>Review the AI-Generated Playbook in Gitea</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before we proceed with executing the final job, let’s take a step back and review what was automatically created for us.</p>
+</div>
+<div class="paragraph">
+<p>Red Hat AI was able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Analyze the Apache failure logs collected by Filebeat and forwarded to RHEL AI</p>
+</li>
+<li>
+<p>Generate a root cause explanation for the issue (RCA)</p>
+</li>
+<li>
+<p>Create a concise and relevant prompt based on the RCA</p>
+</li>
+<li>
+<p>Use that prompt to call Automation coding assistant</p>
+</li>
+<li>
+<p>Automation coding assistant generated an Ansible Playbook to fix the issue</p>
+</li>
+<li>
+<p>The playbook was automatically pushed to Gitea in the <code>lightspeed-playbooks</code> repository</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This showcases a complete AI-driven automation loop — from incident detection to automated remediation content generation — all before a human steps in. Gitea here acts as the version control source of truth, where you can review the generated fix.</p>
+</div>
+<div class="sect2">
+<h3 id="_how_to_review_the_playbook"><a class="anchor" href="#_how_to_review_the_playbook"></a>How to Review the Playbook</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_gitea_access_details"><a class="anchor" href="#_gitea_access_details"></a>Gitea Access Details</h3>
+<div class="paragraph">
+<p>Use the following information to log in to Gitea and review the generated playbook:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gitea URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{gitea_url}" target="_blank" rel="noopener">Gitea Web UI</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{gitea_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{gitea_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Login using the credentials provided.</p>
+</li>
+<li>
+<p>Navigate to the <code>lightspeed-playbooks</code> repository.</p>
+</li>
+<li>
+<p>Review the most recent commits — you should see one that corresponds to the AI-generated fix.</p>
+</li>
+</ol>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 You can open the playbook file and inspect the contents. This is your opportunity to validate the AI-generated output before executing it. Just like in production systems, automated changes should be reviewed—either manually or through automated policy enforcement tools.
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+<strong>Pro Tip:</strong> If you&#8217;re planning to use this in a real-world setup, consider inserting an approval step here or sending the commit as a Pull Request to a <code>staging</code> branch. This way, your remediation workflow includes guardrails for human validation before running automated fixes.
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fix_webserver_issue"><a class="anchor" href="#_fix_webserver_issue"></a>Fix webserver issue</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the left navigation menu, click on <strong>Automation Execution</strong> → <strong>Templates</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/automation_execution_templates.png" target="blank"><img src="_images/automation_execution_templates.png" alt="automation_execution_templates"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Scroll down to the <strong>🔧✅ Execute HTTPD Remediation</strong> job template and click the 🚀 to launch the job.</p>
+</li>
+<li>
+<p>Type in <code>node1</code> for the Limit</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/limit_node1.png" target="blank"><img src="_images/limit_node1.png" alt="limit_node1" width="300"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 A limit in Ansible Automation Platform is equivalent to <code>--limit</code> with the <code>ansible-playbook</code> command.  The limit specifies the host or hosts you want to run the Ansible Job on versus the entire inventory, effectively <strong>limiting</strong> it to only running on those host(s).
+</blockquote>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Click on the blue <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_next_button.png" target="blank"><img src="_images/blue_next_button.png" alt="blue_next_button" width="150"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>5 Review and click the blue <strong>Finish</strong> button.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/blue_finish_button.png" target="blank"><img src="_images/blue_finish_button.png" alt="blue_finish_button" width="150"></a>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_check_success"><a class="anchor" href="#_check_success"></a>Check Success</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Connect to your bastion host either via SSH or Visual Studio Code.  The connection information is provided by your instructor.</p>
+</li>
+<li>
+<p>SSH over to node1</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[lab-user@bastion ~]$ sudo ssh node1
+Last login: Tue Apr  8 15:56:41 2025 from 192.168.0.37
+[ec2-user@node1 ~]$</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Verify httpd is fixed with the <strong>systemctl status httpd.service</strong> command</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">[ec2-user@node1 ~]$ sudo systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; preset: disabled)
+     Active: active (running) since Tue 2025-04-08 17:16:02 UTC; 1min 55s ago
+       Docs: man:httpd.service(8)
+   Main PID: 6024 (httpd)
+     Status: "Total requests: 0; Idle/Busy workers 100/0;Requests/sec: 0; Bytes served/sec:   0 B/sec"
+      Tasks: 177 (limit: 48028)
+     Memory: 23.5M
+        CPU: 193ms
+     CGroup: /system.slice/httpd.service
+             ├─6024 /usr/sbin/httpd -DFOREGROUND
+             ├─6025 /usr/sbin/httpd -DFOREGROUND
+             ├─6026 /usr/sbin/httpd -DFOREGROUND
+             ├─6027 /usr/sbin/httpd -DFOREGROUND
+             └─6028 /usr/sbin/httpd -DFOREGROUND
+
+Apr 08 17:16:02 node1.example.com systemd[1]: Starting The Apache HTTP Server...
+Apr 08 17:16:02 node1.example.com httpd[6024]: Server configured, listening on: port 80
+Apr 08 17:16:02 node1.example.com systemd[1]: Started The Apache HTTP Server.
+[ec2-user@node1 ~]$</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you see <strong>(running)</strong> above it means httpd has been fixed!  You have successfully completed the lab.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_takeaways"><a class="anchor" href="#_takeaways"></a>Takeaways</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Created a Workflow template that automatically creates an Ansible Playbook, pushes the Ansible Playbook to Gitea and then automatically creates a Job Template to fix the issue.</p>
+</li>
+<li>
+<p>Fixed the httpd service using the prompt generated by Red Hat AI</p>
+</li>
+<li>
+<p>Completed an AIOps workflow, by utilizing two different AI endpoints</p>
+</li>
+<li>
+<p>Used the <strong>limit</strong> feature in a Job Template</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aiops-cool.gif" target="blank"><img src="_images/aiops-cool.gif" alt="aiops-cool"></a>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_congratulations_youve_completed_part_1"><a class="anchor" href="#_congratulations_youve_completed_part_1"></a>🎉 Congratulations! You&#8217;ve Completed Part 1!</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have successfully completed the <strong>basic introduction</strong> to AIOps! You&#8217;ve experienced firsthand how <strong>Red Hat AI</strong>, <strong>Automation coding assistant</strong>, and <strong>Ansible Automation Platform</strong> can work together to create intelligent, self-healing infrastructure.</p>
+</div>
+<div class="sect2">
+<h3 id="_what_you_accomplished"><a class="anchor" href="#_what_you_accomplished"></a>What You Accomplished</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>✅ Built an AI-powered log enrichment workflow</p>
+</li>
+<li>
+<p>✅ Used Red Hat AI to analyze incidents and generate insights</p>
+</li>
+<li>
+<p>✅ Used Automation coding assistant to automatically create remediation playbooks</p>
+</li>
+<li>
+<p>✅ Fixed a broken Apache service without writing a single line of playbook code</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_complete"><a class="anchor" href="#_complete"></a>Complete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have finished Section 2. Continue to <a href="module-06.html" class="xref page">Section 3: AIOps with Windows Automation</a> to apply the same event-driven pattern to Windows Server, or pick any other section from the left navigation.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="module-01.html" class="query-params-link">2.1 Log Enrichment and Prompt Generation Workflow</a></span>
+  <span class="next"><a href="module-06.html" class="query-params-link">3. Windows Events and AI-Driven Ticketing</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>  </div>
+</main>
+</div>
+<footer class="footer">
+  <a href="https://demo.redhat.com" target="_blank" class="poweredBy"><p>Powered by</p><div class="labInfo_poweredBy" style="display: block; width: 260px;"><svg class="labInfo_poweredByLogo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1508.5 178.739"><g fill="#111"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#111"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#111" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">Demo Platform</tspan></text></svg></div></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

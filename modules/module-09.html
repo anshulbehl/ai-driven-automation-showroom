@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Section 5 - AI-Driven Incident Response with MCP :: Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</title>
+    <link rel="canonical" href="https://github.com/rhpds/showroom_template_nookbag/modules/module-09.html">
+    <link rel="prev" href="module-07.html">
+    <link rel="next" href="module-10.html">
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://demo.redhat.com" target="_blank" style="margin-left: 5%;">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008.5 178.739" style="width: 200px;"><g fill="#fff"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#fff"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#e00" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">One</tspan></text></svg>
+      </a>
+      <a class="navbar-item site-title" target="__blank" style="color: #fff !important;" href="https://github.com/rhpds/showroom_template_nookbag">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item navbar-item-right-dropdown has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Links</a>
+          <div class="navbar-dropdown navbar-dropdown-right">
+            <a class="navbar-item navbar-item-right-content" href="https://redhat.com" target="_blank">Red Hat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="modules" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 1: IBM Instana Observability and Intelligent Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part2.html">1.2 Smart Alerts and Dual-Path Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 2: AIOps with Apache Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-01.html">2.1 Log Enrichment and Prompt Generation Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-02.html">2.2 Remediation Workflow</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 3: AIOps with Windows Automation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-06.html">3. Windows Events and AI-Driven Ticketing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 4: Red Hat Lightspeed and Agentic IDE Workflow</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 5: AI-Driven Incident Response</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="module-09.html">5. AI Agents and AAP via MCP</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-10.html">Summary and Call to Actions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Dev Mode</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-03.html">Section 2.1 - Splunk for Network Observability</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-04.html">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-05.html">Section 2.3 - Network Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-08.html">Autonomous AIOps: Self-Healing RHEL with Splunk</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="attrs-page.html">Attributes Page</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></li>
+    <li>Section 5: AI-Driven Incident Response</li>
+    <li><a href="module-09.html">5. AI Agents and AAP via MCP</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Section 5 - AI-Driven Incident Response with MCP</h1>
+<div class="sect1">
+<h2 id="_objective"><a class="anchor" href="#_objective"></a>Objective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Estimated time: 30-40 minutes</strong></p>
+</div>
+<div class="paragraph">
+<p>In earlier parts of this lab, you used AI to <strong>generate</strong> automation. Red Hat AI analyzed logs, Automation coding assistant wrote playbooks, and you reviewed the output before running it. The AI was powerful, but it operated in a fixed pipeline: detect, analyze, generate, execute.</p>
+</div>
+<div class="paragraph">
+<p>In this section, you will explore a fundamentally different approach. Instead of pre-built workflows and prompts, you will use AI agents that can directly interact with Ansible Automation Platform through the <strong>Model Context Protocol (MCP)</strong>, an open standard that lets AI models discover and use tools in real time. The AI no longer generates playbooks. It discovers <strong>existing</strong> automation and decides which playbooks to run, when, and in what order.</p>
+</div>
+<div class="paragraph">
+<p>You will work through three challenges that progressively increase the level of AI autonomy:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Challenge 1: You drive the AI.</strong> Use Claude Code to interactively query and control Ansible Automation Platform.</p>
+</li>
+<li>
+<p><strong>Challenge 2: AI drives Ansible Automation Platform.</strong> Autonomous AI agents triage, fix, and report on incidents.</p>
+</li>
+<li>
+<p><strong>Challenge 3: Event-driven AI.</strong> Event-Driven Ansible detects failures and triggers AI agents automatically.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_why_ansible_automation_platform_for_ai_driven_operations"><a class="anchor" href="#_why_ansible_automation_platform_for_ai_driven_operations"></a>Why Ansible Automation Platform for AI-driven operations?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>AI models and agent frameworks are powerful, but they are inherently <strong>non-deterministic</strong>. The same prompt can produce different results depending on the model, temperature settings, context window, and even the time of day. In a development environment, that variability is acceptable. In production infrastructure, it is not.</p>
+</div>
+<div class="paragraph">
+<p>Consider what happens when AI agents interact directly with production systems without governance:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A misconfigured AI agent at a <strong>financial institution</strong> autonomously rolls back a database migration, corrupting transaction records for thousands of customers.</p>
+</li>
+<li>
+<p>An AI-driven remediation in a <strong>healthcare system</strong> restarts a service that handles patient data, violating HIPAA compliance because no audit trail captured the decision.</p>
+</li>
+<li>
+<p>An autonomous agent in a <strong>retail environment</strong> scales down infrastructure during what it interprets as low traffic, but it is actually Black Friday pre-staging.</p>
+</li>
+<li>
+<p>An AI agent with direct SSH access to production servers executes an untested fix, taking down a <strong>payment processing pipeline</strong> during peak hours.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These are not hypothetical edge cases. In 2024, an AI-powered coding assistant at a major tech company autonomously merged code that bypassed security reviews, causing a production outage. AI systems operating without governance guardrails create real risk.</p>
+</div>
+<div class="paragraph">
+<p><strong>Ansible Automation Platform solves this</strong> by separating what AI is good at from what it is not. AI handles the <strong>non-deterministic</strong> work: reasoning about incidents, triaging alerts, deciding which action to take. Ansible handles the <strong>deterministic</strong> work: executing tested playbooks, enforcing access controls, recording audit trails. The AI decides <strong>what</strong> to do. Ansible governs <strong>how</strong> it gets done.</p>
+</div>
+<div class="paragraph">
+<p>When AI agents need to touch production systems (restart services, apply patches, modify configurations), those actions go through Ansible Automation Platform. That means:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Deterministic execution:</strong> tested, repeatable playbooks replace ad-hoc AI-generated commands</p>
+</li>
+<li>
+<p><strong>User-scoped identity:</strong> AI agents act under the identity and permissions of the authorizing user, not a shadow service account with elevated access</p>
+</li>
+<li>
+<p><strong>RBAC controls:</strong> the same role-based access that governs human operators governs AI agents</p>
+</li>
+<li>
+<p><strong>Audit trails:</strong> every action, every decision, every outcome is captured</p>
+</li>
+<li>
+<p><strong>Approval gates:</strong> humans can review AI recommendations before execution</p>
+</li>
+<li>
+<p><strong>Credential management:</strong> secrets stay in Ansible, never exposed to AI agent code</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this module, you will see this pattern in action: AI agents connect to Ansible Automation Platform via MCP, but <strong>every infrastructure operation goes through Ansible</strong>. The AI agent never SSHs into a server, never runs ad-hoc commands, never touches infrastructure directly. It discovers available automation, selects the right playbook, and asks Ansible Automation Platform to execute it, under the authorizing user&#8217;s identity, with full RBAC, audit, and governance.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_mcp"><a class="anchor" href="#_what_is_mcp"></a>What is MCP?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <strong>Model Context Protocol (MCP)</strong> is an open standard that allows AI models to discover and use external tools. Think of it as a USB-C port for AI: a universal connector that lets any AI system plug into any tool server.</p>
+</div>
+<div class="paragraph">
+<p>In this lab, Ansible Automation Platform hosts an MCP server that exposes its capabilities as tools:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Job Management:</strong> list, launch, and monitor job templates</p>
+</li>
+<li>
+<p><strong>Inventory Management:</strong> query hosts, groups, and inventories</p>
+</li>
+<li>
+<p><strong>Security:</strong> manage credentials and audit activity</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Any MCP-compatible AI client can discover these tools automatically and use them to interact with Ansible Automation Platform. No custom API integration code required.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_note_on_models_and_frameworks"><a class="anchor" href="#_a_note_on_models_and_frameworks"></a>A note on models and frameworks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this module, we use <strong>Claude</strong> (by Anthropic) as the AI model and <strong>CrewAI</strong> as the agent framework. These are choices, not requirements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Models:</strong> MCP is model-agnostic. Any large language model that supports tool use (Claude, GPT, Gemini, Llama, Granite, Mistral) can connect to the Ansible Automation Platform MCP server and interact with the same tools. In earlier parts of this lab, you used Automation coding assistant to generate playbooks (AI as a <strong>code generator</strong>). Here, you use Claude to interact with Ansible Automation Platform at runtime (AI as a <strong>decision-maker</strong>). Both patterns are valid, and your organization&#8217;s AI strategy determines which models you use. The integration pattern remains the same.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learning_objectives"><a class="anchor" href="#_learning_objectives"></a>Learning objectives</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After completing this section, you will be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Use an AI coding assistant (Claude Code) to interact with Ansible Automation Platform through MCP</p>
+</li>
+<li>
+<p>Run autonomous AI agents that triage and remediate incidents using Ansible Automation Platform</p>
+</li>
+<li>
+<p>Combine Event-Driven Ansible with AI agents for automated incident response</p>
+</li>
+<li>
+<p>Articulate why AI agents should interact with infrastructure <strong>through</strong> Ansible Automation Platform, not directly</p>
+</li>
+<li>
+<p>Understand how the automation orchestrator, an exciting new feature coming to Ansible Automation Platform, will unify these approaches</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenge_1_human_in_the_loop_with_claude_code"><a class="anchor" href="#_challenge_1_human_in_the_loop_with_claude_code"></a>Challenge 1: Human-in-the-loop with Claude Code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this challenge, you will use Claude Code, an AI coding assistant, to interact with Ansible Automation Platform through natural language. Claude Code connects to the MCP server and discovers available tools automatically. You stay in control: you ask questions, review results, and decide what actions to take.</p>
+</div>
+<div class="sect2">
+<h3 id="_step_1_1_open_vs_code"><a class="anchor" href="#_step_1_1_open_vs_code"></a>Step 1.1: Open VS Code</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click the <strong>@Codeserver</strong> tab in your lab interface</p>
+</li>
+<li>
+<p>Enter your password if prompted: <code>{{ common_password }}</code></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_2_open_claude_code"><a class="anchor" href="#_step_1_2_open_claude_code"></a>Step 1.2: Open Claude Code</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open a terminal in VS Code: click <strong>Terminal</strong> in the top menu bar, then click <strong>New Terminal</strong></p>
+</li>
+<li>
+<p>Claude Code is pre-installed. Start it by typing the following command and pressing <strong>Enter</strong>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">claude</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Wait for Claude Code to initialize. You should see the Claude Code interface with a prompt ready for input.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude_code_terminal.png" target="blank"><img src="_images/claude_code_terminal.png" alt="Claude Code Terminal" width="100%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+When Claude Code starts for the first time, it will display a safety prompt asking if you trust the current folder. Select <strong>1. Yes, I trust this folder</strong> and press <strong>Enter</strong> to continue.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Claude Code is already configured to connect to the Ansible Automation Platform MCP server. No additional setup is required. When you ask Claude about Ansible Automation Platform, it will automatically discover and use the MCP tools.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Model availability.</strong> This lab environment provides access to <strong>Claude Sonnet 4.6</strong> (<code>claude-sonnet-4-6</code>). If Claude Code fails to respond or shows a model error, switch to the correct model:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>CLI</strong>: Type <code>/model</code> and select <code>claude-sonnet-4-6</code></p>
+</li>
+<li>
+<p><strong>VS Code extension</strong>: Click the model name in the status bar or use <code>Ctrl+Shift+P</code> &#8594; "Claude Code: Set Model"</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_3_discover_available_automation"><a class="anchor" href="#_step_1_3_discover_available_automation"></a>Step 1.3: Discover available automation</h3>
+<div class="paragraph">
+<p>Claude Code is connected to the MCP server. Type the following prompt and press <strong>Enter</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Search for job templates related to "Apache" in AAP. List their names, IDs, and descriptions.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Before Claude executes any MCP tool, it will ask for your permission:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Do you want to proceed?
+ ❯ 1. Yes
+   2. Yes, and don't ask again for aap-job-mgmt - job_templates_list commands in /home/lab-user
+   3. No</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is an important safety guardrail. Claude Code requires explicit human approval before calling external tools. It will not take action on its own without your consent. Select <strong>1. Yes</strong> to approve the tool call and continue. You will see this prompt each time Claude wants to use a new MCP tool.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to speed up your workflow, select option <strong>2</strong> to allow Claude to use that specific tool without asking again for the remainder of the session. This is useful once you are comfortable with the tools Claude is calling.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>What to observe:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Claude calls the <code>job_templates_list</code> MCP tool with a search filter. You will see the tool call in the output.</p>
+</li>
+<li>
+<p>Claude presents the results in a readable, formatted table</p>
+</li>
+<li>
+<p>You should see templates including <strong>Break Apache</strong>, <strong>Restore Apache</strong>, and <strong>Apache Service Status Check</strong></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_4_check_infrastructure_status"><a class="anchor" href="#_step_1_4_check_infrastructure_status"></a>Step 1.4: Check infrastructure status</h3>
+<div class="paragraph">
+<p>Type the following prompt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">What hosts are registered in AAP? Which inventories do they belong to?</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude_host_inventory.png" target="blank"><img src="_images/claude_host_inventory.png" alt="Claude Host Inventory Results" width="100%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>What to observe:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Claude queries <strong>both</strong> the <code>hosts_list</code> and <code>inventories_list</code> MCP tools</p>
+</li>
+<li>
+<p>It cross-references the data to show which hosts belong to which inventories</p>
+</li>
+<li>
+<p>You should see <code>node1</code> in the <code>lab-inventory</code> and <code>bastion</code> in the <code>lab-inventory</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_5_investigate_recent_activity"><a class="anchor" href="#_step_1_5_investigate_recent_activity"></a>Step 1.5: Investigate recent activity</h3>
+<div class="paragraph">
+<p>Type the following prompt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Show me the most recent jobs that have run. Were there any failures?</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>What to observe:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Claude uses the <code>jobs_list</code> tool to retrieve recent job history</p>
+</li>
+<li>
+<p>It highlights any failures and shows job status (successful, failed, running)</p>
+</li>
+<li>
+<p>You should see the jobs that were launched during the lab provisioning process</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_6_take_action_and_diagnose_a_problem"><a class="anchor" href="#_step_1_6_take_action_and_diagnose_a_problem"></a>Step 1.6: Take action and diagnose a problem</h3>
+<div class="paragraph">
+<p>Now ask Claude to take an action. Type the following prompt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">Launch the "Apache Service Status Check" job template and show me the results when it completes.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>What to observe:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Claude calls the <code>job_templates_launch_create</code> MCP tool to start the job</p>
+</li>
+<li>
+<p>It polls the <code>jobs_retrieve</code> tool to check job status until completion</p>
+</li>
+<li>
+<p>It retrieves the output using <code>jobs_stdout_retrieve</code> and presents the results</p>
+</li>
+<li>
+<p>Apache should currently be running on node1</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Notice what is happening here: Claude <strong>does not SSH into node1</strong> to check Apache. It asks Ansible Automation Platform to run a job template (a pre-approved, tested playbook) and reads the results. The AI never touches infrastructure directly.</p>
+</div>
+<div class="paragraph">
+<p>Also notice <strong>who</strong> is executing: Claude uses your lab user&#8217;s gateway token, which means it operates under <strong>your</strong> RBAC permissions. You can verify this in the Ansible Automation Platform UI: navigate to <strong>Access Management</strong> &#8594; <strong>OAuth2 Tokens</strong> and you will see the token that the MCP server uses. If your user lacked access to the Apache templates, Claude would be denied, just like a human operator would be. There are no hidden service accounts or elevated AI privileges.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_7_try_your_own_prompts"><a class="anchor" href="#_step_1_7_try_your_own_prompts"></a>Step 1.7: Try your own prompts</h3>
+<div class="paragraph">
+<p>Now experiment on your own. Here are some ideas:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>What credentials are configured in AAP?</code></p>
+</li>
+<li>
+<p><code>Launch the Restore Apache template and wait for it to finish</code></p>
+</li>
+<li>
+<p><code>Check the status of job ID 5 and show me its output</code></p>
+</li>
+<li>
+<p><code>Which templates target node1?</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_you_learned"><a class="anchor" href="#_what_you_learned"></a>What you learned</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>MCP lets any AI model discover and use Ansible Automation Platform.</strong> No custom API code, no hardcoded integrations, model-agnostic by design.</p>
+</li>
+<li>
+<p><strong>All infrastructure operations go through Ansible.</strong> The AI never accesses hosts directly. Every action is governed by RBAC and recorded in the audit trail.</p>
+</li>
+<li>
+<p><strong>You stay in control.</strong> The AI suggests, you decide and approve. This is the human-in-the-loop model for AI-driven operations.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenge_2_autonomous_agents_with_crewai"><a class="anchor" href="#_challenge_2_autonomous_agents_with_crewai"></a>Challenge 2: Autonomous agents with CrewAI</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_is_an_ai_agent"><a class="anchor" href="#_what_is_an_ai_agent"></a>What is an AI agent?</h3>
+<div class="paragraph">
+<p>In Challenge 1, you typed prompts and decided what to do next. In the earlier parts of this lab, you built workflows that followed a fixed sequence: check status, call AI, generate playbook, commit to Git, execute. An AI <strong>agent</strong> is different. It receives a goal and autonomously figures out how to achieve it. It can call external tools, break a problem into steps, make decisions based on what it observes, and adjust its approach when something does not work.</p>
+</div>
+<div class="paragraph">
+<p>In this lab, each agent is a small Python program that connects to an LLM, receives a goal (for example, "Apache is down on node1"), and autonomously decides which MCP tools to call, in what order, and what to do with the results. You do not build the workflow in advance. The agent builds it at runtime.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_why_crewai"><a class="anchor" href="#_why_crewai"></a>Why CrewAI?</h3>
+<div class="paragraph">
+<p>CrewAI is one of many open-source agent frameworks available today (LangGraph, AutoGen, Semantic Kernel, and others). We chose it because it is simple to understand and demonstrates multi-agent collaboration clearly. The key concept is not the framework. It is the <strong>integration pattern</strong>: AI agents connected to Ansible Automation Platform through MCP, with Ansible providing the governed execution layer for all infrastructure operations.</p>
+</div>
+<div class="paragraph">
+<p>In this challenge, you move from human-in-the-loop to <strong>autonomous agents</strong>. You will run an incident response crew, a team of specialized AI agents that collaborate to handle an incident without human intervention.</p>
+</div>
+<div class="paragraph">
+<p>The incident agent has three specialists:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Triage Agent</strong> discovers available automation, confirms the target host, and creates an action plan</p>
+</li>
+<li>
+<p><strong>Executor Agent</strong> launches the recommended job templates, monitors their progress, and collects results</p>
+</li>
+<li>
+<p><strong>Reporter Agent</strong> summarizes the entire incident response into a concise report</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Each agent connects to Ansible Automation Platform through the <strong>same MCP server</strong> as Claude Code. The agents discover available automation, select the right job templates, and ask Ansible Automation Platform to execute them. The AI agents <strong>never</strong> SSH into servers or run ad-hoc commands. Every infrastructure operation goes through Ansible.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_1_disable_eda_activations"><a class="anchor" href="#_step_2_1_disable_eda_activations"></a>Step 2.1: Disable EDA activations</h3>
+<div class="paragraph">
+<p>Before running agents from the CLI, disable all EDA rulebook activations so they do not trigger duplicate responses to the jobs the agent launches.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <strong>Ansible Automation Platform</strong> tab</p>
+</li>
+<li>
+<p>Navigate to <strong>Automation Decisions</strong> &#8594; <strong>Rulebook Activations</strong></p>
+</li>
+<li>
+<p><strong>Disable</strong> the <strong>Web App</strong> activation:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select the checkbox next to <strong>Web App</strong></p>
+</li>
+<li>
+<p>Click the <strong>Disable rulebook activations</strong> button</p>
+</li>
+<li>
+<p>Check the confirmation checkbox and click <strong>Disable rulebook activations</strong></p>
+</li>
+<li>
+<p>Click <strong>Close</strong> when complete</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/disable_rulebook_activation.png" target="blank"><img src="_images/disable_rulebook_activation.png" alt="Disable Rulebook Activation" width="80%"></a>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Verify that <strong>both</strong> the Web App and AI Agent activations show <strong>Disabled</strong></p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/eda_both_disabled.png" target="blank"><img src="_images/eda_both_disabled.png" alt="Both EDA Activations Disabled" width="100%"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_2_open_the_terminal"><a class="anchor" href="#_step_2_2_open_the_terminal"></a>Step 2.2: Open the terminal</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click the <strong>&gt;_Terminal-01</strong> tab in your lab interface, or use the VS Code terminal from Challenge 1</p>
+</li>
+<li>
+<p>Navigate to the agent directory and activate the Python virtual environment:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd ~/agentic-aiops
+source ~/.venv/bin/activate</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify that you are in the correct directory:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">pwd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">/home/lab-user/agentic-aiops</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_3_run_the_triage_agent"><a class="anchor" href="#_step_2_3_run_the_triage_agent"></a>Step 2.3: Run the triage agent</h3>
+<div class="paragraph">
+<p>The triage agent is the first responder. Its job is to discover what automation is available, confirm the target host exists, and create an action plan for resolving the issue. It does not take any action itself. It only investigates and recommends.</p>
+</div>
+<div class="paragraph">
+<p>In this step, you are <strong>not</strong> breaking anything yet. Apache is still running normally on node1. You are passing a simulated alert message to the triage agent to see how it reasons about a reported problem. The agent will query AAP for available job templates, confirm the target host exists in inventory, review recent job history, and build a remediation plan. Note that the triage agent only investigates and recommends. It does not execute any jobs or verify the actual state of Apache. It builds its understanding from the information available through MCP (templates, hosts, job history) and proposes a plan for the executor agent to carry out in the next step.</p>
+</div>
+<div class="paragraph">
+<p>Run only the triage agent first to see how it analyzes the situation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py triage "Apache web server is down on node1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait for the agent to complete (approximately 15-30 seconds). Review the output carefully.</p>
+</div>
+<div class="paragraph">
+<p><strong>What to verify in the triage output:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>PROBLEM:</strong> the agent restates the reported issue</p>
+</li>
+<li>
+<p><strong>TEMPLATES:</strong> the agent lists relevant templates it discovered via MCP: <code>Apache Service Status Check</code>, <code>Restore Apache</code></p>
+</li>
+<li>
+<p><strong>HOST:</strong> the agent confirms that <code>node1</code> exists in <code>lab-inventory</code></p>
+</li>
+<li>
+<p><strong>RECENT ACTIVITY:</strong> the agent may note recent job history (e.g., previous status checks or restores that ran successfully)</p>
+</li>
+<li>
+<p><strong>PLAN:</strong> the agent proposes a numbered sequence: check status, restore, verify</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Since Apache is actually running fine right now, the agent&#8217;s plan still proposes remediation steps based on the reported alert. The triage agent takes the reported problem at face value and plans accordingly. It does not verify whether the problem is real. That verification happens when the executor agent runs the plan in the next step.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The agent runs silently by default, showing only the final result. To see the full agent reasoning and every MCP tool call, add the <code>--verbose</code> flag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py triage --verbose "Apache web server is down on node1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is useful for understanding <strong>how</strong> the agent makes decisions.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_4_run_the_executor_agent"><a class="anchor" href="#_step_2_4_run_the_executor_agent"></a>Step 2.4: Run the executor agent</h3>
+<div class="paragraph">
+<p>The executor agent acts on the triage plan, but it does not touch infrastructure directly. It runs the triage step internally first to understand the situation, then asks Ansible Automation Platform to launch the recommended job templates. It monitors each job until completion and collects the results. The agent decides <strong>what</strong> to run; Ansible Automation Platform governs <strong>how</strong> it runs.</p>
+</div>
+<div class="paragraph">
+<p>Now run the executor agent to see how it acts on a triage plan:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py execute "Apache web server is down on node1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait for the agent to complete (approximately 60-90 seconds, as it launches and monitors AAP jobs).</p>
+</div>
+<div class="paragraph">
+<p><strong>What to verify in the execution output:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The agent runs the triage step internally first (to build a plan)</p>
+</li>
+<li>
+<p>It launches job templates through Ansible Automation Platform, <strong>not</strong> by running commands directly</p>
+</li>
+<li>
+<p>Each job is monitored until completion</p>
+</li>
+<li>
+<p>The output reports success or failure for each job</p>
+</li>
+<li>
+<p>Since Apache is currently running fine, the status check job will report that httpd is active. The agent may still run "Restore Apache" as a precaution, or it may skip it after seeing the service is healthy. Either behavior is valid; the agent adapts based on what it observes.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Notice that the executor agent makes <strong>autonomous decisions</strong> about which templates to run. It does not ask for your approval. This is the key difference from Challenge 1: the AI decides what to do, then asks Ansible Automation Platform to execute it. You review after.</p>
+</div>
+<div class="paragraph">
+<p>But critically, <strong>increasing autonomy does not reduce governance</strong>. The agent&#8217;s reasoning is non-deterministic. The same alert could produce a slightly different triage plan each time. But the <strong>execution</strong> is deterministic: tested, repeatable Ansible playbooks running through Ansible Automation Platform under the same user-scoped identity, the same RBAC permissions, and the same audit trail as Challenge 1. The agent cannot bypass access controls, skip audit logging, or run unvetted commands. The autonomy is in <strong>decision-making</strong>, not in <strong>execution</strong>, and the governance controls scale with the level of autonomy.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_5_run_the_reporter_agent"><a class="anchor" href="#_step_2_5_run_the_reporter_agent"></a>Step 2.5: Run the reporter agent</h3>
+<div class="paragraph">
+<p>The reporter agent runs the entire pipeline (triage and execution), then summarizes everything into a concise incident report. Its job is to produce a clear record of what happened, what was done, and whether the issue was resolved.</p>
+</div>
+<div class="paragraph">
+<p>Run the reporter agent to generate an incident summary:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py report "Apache web server is down on node1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait for the agent to complete (approximately 90-120 seconds, as it runs all three stages).</p>
+</div>
+<div class="paragraph">
+<p><strong>What to verify in the report output:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>PROBLEM:</strong> what happened</p>
+</li>
+<li>
+<p><strong>TRIAGE:</strong> what was found</p>
+</li>
+<li>
+<p><strong>ACTIONS:</strong> what was done and the results</p>
+</li>
+<li>
+<p><strong>OUTCOME:</strong> resolved or not</p>
+</li>
+<li>
+<p><strong>RECOMMENDATION:</strong> one actionable suggestion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_6_run_the_full_pipeline_with_a_simulated_incident"><a class="anchor" href="#_step_2_6_run_the_full_pipeline_with_a_simulated_incident"></a>Step 2.6: Run the full pipeline with a simulated incident</h3>
+<div class="paragraph">
+<p>Now run all three agents in sequence (triage, execute, and report) with a simulated incident:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py all "Apache web server is down on node1" --break-first</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <code>--break-first</code> flag first runs the <strong>Break Apache</strong> template to simulate a real incident, then lets the agents respond. They reason autonomously, but execute all actions through Ansible Automation Platform.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Watch the output as each agent completes its work:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>TRIAGE:</strong> the action plan appears first</p>
+</li>
+<li>
+<p><strong>EXECUTION:</strong> jobs are launched and monitored</p>
+</li>
+<li>
+<p><strong>REPORT:</strong> a final incident summary is produced</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is the full autonomous incident response pipeline: detect, triage, remediate, verify, report.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_7_verify_in_ansible_automation_platform"><a class="anchor" href="#_step_2_7_verify_in_ansible_automation_platform"></a>Step 2.7: Verify in Ansible Automation Platform</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Switch to the <strong>Ansible Automation Platform</strong> tab</p>
+</li>
+<li>
+<p>Navigate to <strong>Automation Execution</strong> &#8594; <strong>Jobs</strong></p>
+</li>
+<li>
+<p>You should see jobs launched by the AI agents. Look for:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&#x2705; <strong>Break Apache</strong> (the simulated incident, launched by <code>--break-first</code>)</p>
+</li>
+<li>
+<p>&#x2705; <strong>Apache Service Status Check</strong> (the diagnostic check, launched by the agent)</p>
+</li>
+<li>
+<p>&#x2705; <strong>Restore Apache</strong> (the remediation, launched by the agent)</p>
+</li>
+<li>
+<p>&#x2705; <strong>Apache Service Status Check</strong> (the verification, launched by the agent)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Click on any job to review its output and verify it completed successfully</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Every job launched by the AI agent appears in the Ansible Automation Platform job history with full audit details: who launched it, when, which credentials were used, and the complete output. This is the governance value. Even when AI makes the decisions, Ansible provides the audit trail.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_8_test_the_agents_judgment"><a class="anchor" href="#_step_2_8_test_the_agents_judgment"></a>Step 2.8: Test the agent&#8217;s judgment</h3>
+<div class="paragraph">
+<p>Run the triage agent with a problem that has no matching automation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">python3 incident_agent.py triage "PostgreSQL database is not responding on node1"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>What to verify:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The agent should honestly report that <strong>no relevant templates were found</strong></p>
+</li>
+<li>
+<p>It should <strong>not</strong> run unrelated automation (like Restore Apache) just because templates exist</p>
+</li>
+<li>
+<p>The agent demonstrates responsible behavior: when it cannot help, it says so</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is a critical test. In production, you do not want an AI agent guessing and running random playbooks when it encounters an unfamiliar problem.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_you_learned_2"><a class="anchor" href="#_what_you_learned_2"></a>What you learned</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>AI reasons, Ansible executes.</strong> Agents handle the non-deterministic work (triaging, deciding) while Ansible Automation Platform handles the deterministic work (executing tested playbooks, enforcing access controls, recording audit trails).</p>
+</li>
+<li>
+<p><strong>Agents exercise responsible judgment.</strong> They do not run irrelevant automation, and when they cannot help, they say so.</p>
+</li>
+<li>
+<p><strong>Governance scales with autonomy.</strong> User-scoped identity, RBAC, and full audit trails apply whether a human drives the AI or the AI drives itself.</p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenge_3_operationalizing_ai_agents_with_ansible_automation_platform"><a class="anchor" href="#_challenge_3_operationalizing_ai_agents_with_ansible_automation_platform"></a>Challenge 3: Operationalizing AI agents with Ansible Automation Platform</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In Challenges 1 and 2, you ran AI agents interactively from the command line. That is great for development and testing, but how do you put AI agents into production? In this challenge, you will operationalize the AI agent using the tools Ansible Automation Platform already provides: Event-Driven Ansible for detection, job templates for execution, and Mattermost for notification.</p>
+</div>
+<div class="paragraph">
+<p>This is the highest level of autonomy in this module: fully automated from detection to resolution. But the governance model does not change. The AI agent still operates under the same user-scoped identity, the same RBAC controls, and the same audit trail. Every action is logged, every job is traceable, and every credential is managed by Ansible Automation Platform. The automation becomes faster, not less governed.</p>
+</div>
+<div class="paragraph">
+<p>This works, and it works well. Along the way, you will also see where the current approach requires creative engineering, and where the upcoming automation orchestrator will make things simpler.</p>
+</div>
+<div class="sect2">
+<h3 id="_how_it_works"><a class="anchor" href="#_how_it_works"></a>How it works</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A service fails on node1 (Apache)</p>
+</li>
+<li>
+<p><strong>Filebeat</strong> captures the log event and sends it to <strong>Kafka</strong></p>
+</li>
+<li>
+<p><strong>Event-Driven Ansible</strong> consumes the Kafka topic and triggers a job template</p>
+</li>
+<li>
+<p>The job template runs the <strong>AI agent</strong> on bastion</p>
+</li>
+<li>
+<p>The agent triages, remediates (if possible), and posts results to <strong>Mattermost</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Notice that this uses the same EDA pipeline you saw in earlier modules. The only difference is what gets triggered. Instead of a deterministic playbook, EDA launches an AI agent. Your existing event-driven infrastructure works unchanged. You are just swapping what happens when an event arrives.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_1_enable_the_ai_agent_eda_activation"><a class="anchor" href="#_step_3_1_enable_the_ai_agent_eda_activation"></a>Step 3.1: Enable the AI Agent EDA activation</h3>
+<div class="paragraph">
+<p>In Challenge 2, you disabled all EDA activations to prevent interference while running agents from the CLI. Now you will enable the <strong>AI Agent</strong> activation so that Event-Driven Ansible triggers the AI agent automatically when failures are detected.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <strong>Ansible Automation Platform</strong> tab</p>
+</li>
+<li>
+<p>Navigate to <strong>Automation Decisions</strong> &#8594; <strong>Rulebook Activations</strong></p>
+</li>
+<li>
+<p>Verify that the <strong>Web App</strong> activation is still <strong>Disabled</strong> (you disabled it in Challenge 2)</p>
+</li>
+<li>
+<p><strong>Enable</strong> the AI Agent activation:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Click on <strong>AI Agent</strong> to open it</p>
+</li>
+<li>
+<p>Toggle the activation to <strong>Enabled</strong></p>
+</li>
+<li>
+<p>Wait for the status to show <strong>Running</strong></p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/eda_ai_agent_running.png" target="blank"><img src="_images/eda_ai_agent_running.png" alt="AI Agent Activation Running" width="60%"></a>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <strong>Web App</strong> activation must remain disabled. Both activations listen for Apache events on the same Kafka topic. Running both simultaneously would cause duplicate responses to the same event.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_2_break_apache_and_watch_the_ai_respond"><a class="anchor" href="#_step_3_2_break_apache_and_watch_the_ai_respond"></a>Step 3.2: Break Apache and watch the AI respond</h3>
+<div class="paragraph">
+<p>Simulate an Apache failure and let the event-driven pipeline handle it end-to-end:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> &#8594; <strong>Templates</strong></p>
+</li>
+<li>
+<p>Find the <strong>Break Apache</strong> job template and click the launch icon (rocket)</p>
+</li>
+<li>
+<p>Wait for the job to complete successfully</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This breaks the Apache configuration on node1. Here is what happens next, automatically:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Filebeat</strong> on node1 detects the error in <code>/var/log/httpd/error_log</code></p>
+</li>
+<li>
+<p>Filebeat sends the event to <strong>Kafka</strong> on the <code>httpd-error-logs</code> topic</p>
+</li>
+<li>
+<p><strong>Event-Driven Ansible</strong> consumes the Kafka event and matches the rule</p>
+</li>
+<li>
+<p>EDA triggers the <strong>AI Agent: Incident Response</strong> job template</p>
+</li>
+<li>
+<p>The AI agent reasons autonomously on bastion (triaging, deciding, and reporting) while all infrastructure actions execute through Ansible Automation Platform</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_3_watch_the_ai_agent_in_action"><a class="anchor" href="#_step_3_3_watch_the_ai_agent_in_action"></a>Step 3.3: Watch the AI agent in action</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Execution</strong> &#8594; <strong>Jobs</strong></p>
+</li>
+<li>
+<p>Watch for the <strong>AI Agent: Incident Response</strong> job to appear. This was triggered automatically by EDA (it may take 30-60 seconds after the Break Apache job completes).</p>
+</li>
+<li>
+<p>Click on the job to view the output</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>You should see three stages in the job output:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Stage 1: Triage.</strong> The agent identifies available Apache-related templates and creates a plan.</p>
+</li>
+<li>
+<p><strong>Stage 2: Execute.</strong> The agent launches Restore Apache and monitors the job.</p>
+</li>
+<li>
+<p><strong>Stage 3: Report.</strong> The agent produces a summary and posts it to Mattermost.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_4_check_mattermost"><a class="anchor" href="#_step_3_4_check_mattermost"></a>Step 3.4: Check Mattermost</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the <strong>Mattermost</strong> tab in your lab interface</p>
+</li>
+<li>
+<p>Navigate to the <strong>Town Square</strong> channel</p>
+</li>
+<li>
+<p>Look for the AI Agent&#8217;s incident report</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>What to verify in the Mattermost report:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>PROBLEM:</strong> describes the Apache shutdown</p>
+</li>
+<li>
+<p><strong>TRIAGE:</strong> what the agent found</p>
+</li>
+<li>
+<p><strong>ACTIONS:</strong> which job templates were launched and their results</p>
+</li>
+<li>
+<p><strong>OUTCOME:</strong> whether the issue was resolved</p>
+</li>
+<li>
+<p><strong>RECOMMENDATION:</strong> one actionable suggestion</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/mattermost_agent_report.png" target="blank"><img src="_images/mattermost_agent_report.png" alt="Mattermost AI Agent Report" width="100%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The report should show a <strong>green</strong> bar on the left if the issue was resolved, or a <strong>red</strong> bar if it was not.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_5_restore_the_original_configuration"><a class="anchor" href="#_step_3_5_restore_the_original_configuration"></a>Step 3.5: Restore the original configuration</h3>
+<div class="paragraph">
+<p>After completing this challenge, re-enable the Web App activation:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to <strong>Automation Decisions</strong> &#8594; <strong>Rulebook Activations</strong></p>
+</li>
+<li>
+<p>Click on <strong>AI Agent</strong> and toggle it to <strong>Disabled</strong></p>
+</li>
+<li>
+<p>Click on <strong>Web App</strong> and toggle it to <strong>Enabled</strong></p>
+</li>
+<li>
+<p>Verify that the Web App activation shows <strong>Running</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_you_learned_3"><a class="anchor" href="#_what_you_learned_3"></a>What you learned</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Your existing EDA infrastructure works unchanged.</strong> You swap the action from a deterministic playbook to an AI agent without modifying the event pipeline.</p>
+</li>
+<li>
+<p><strong>End-to-end automation from detection to resolution.</strong> The agent handles triage, remediation, verification, and notification autonomously through Ansible Automation Platform.</p>
+</li>
+<li>
+<p><strong>Full governance in fully autonomous mode.</strong> Every infrastructure operation still goes through Ansible with RBAC, user-scoped identity, and complete audit trails.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_what_required_creative_engineering"><a class="anchor" href="#_what_required_creative_engineering"></a>What required creative engineering</h3>
+<div class="paragraph">
+<p>This approach works, and it demonstrates real value. But as you went through the challenge, you may have noticed areas where the integration required some creative engineering:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>The agent runs as a Python script wrapped in a job template.</strong> This works, but the agent is essentially a black box to Ansible Automation Platform. The platform launches it, waits for it to finish, and captures stdout. It cannot see inside the agent&#8217;s decision-making process.</p>
+</li>
+<li>
+<p><strong>No approval gate between triage and execution.</strong> In Challenge 2, you saw the triage agent produce an action plan. In a production scenario, you might want a human to review that plan before the executor agent acts on it. Today, you could build this with a workflow that has an approval node between two job templates, but translating the agent&#8217;s triage output into a meaningful approval prompt requires custom glue code.</p>
+</li>
+<li>
+<p><strong>Two audit trails.</strong> Ansible Automation Platform tracks the job template execution (who launched it, when, success/failure). But the agent&#8217;s internal reasoning (which templates it considered, why it chose a specific action, what MCP tools it called) lives in stdout. There is no unified view.</p>
+</li>
+<li>
+<p><strong>Context does not flow natively.</strong> The agent discovers the state of Ansible Automation Platform by querying MCP tools at runtime. It works, but data does not flow between the EDA event, the job template, and the agent as a connected pipeline.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>None of these are blockers. You just built a working end-to-end system. But they represent areas where the platform can evolve to make AI agent integration simpler, more governed, and more transparent.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_comes_next_automation_orchestrator"><a class="anchor" href="#_what_comes_next_automation_orchestrator"></a>What comes next: automation orchestrator</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>What you built today works. The question is: how do you scale this across an enterprise with hundreds of agents, thousands of events, and strict governance requirements?</p>
+</div>
+<div class="paragraph">
+<p>The <strong>automation orchestrator</strong> is an exciting new capability coming to Ansible Automation Platform that enables AI agents to natively invoke governed automation through visual workflow design and unified audit trails. Ansible Automation Platform is not becoming an agent runtime or agent hosting platform. It remains the <strong>trusted execution layer</strong> that agents call. The automation orchestrator makes that integration seamless.</p>
+</div>
+<div class="sect2">
+<h3 id="_how_the_automation_orchestrator_changes_the_game"><a class="anchor" href="#_how_the_automation_orchestrator_changes_the_game"></a>How the automation orchestrator changes the game</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Capability</th>
+<th class="tableblock halign-left valign-top">Today (what you built)</th>
+<th class="tableblock halign-left valign-top">With automation orchestrator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AI agents invoking automation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wrapped in job templates as Python scripts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Native workflow nodes that invoke governed automation alongside playbooks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human-in-the-loop</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Approval nodes between job templates, requires custom glue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Native approval gates between any nodes, including AI-driven steps</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Context flow</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Agent queries Ansible Automation Platform state via MCP at runtime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data flows natively between Ansible nodes, AI nodes, and approval gates</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Audit and governance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job logs + agent stdout in separate places</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unified audit trail across all automation types</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Workflow design</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YAML, code, and creative engineering</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Visual drag-and-drop designer with AI and Ansible nodes side by side</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Model integration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">External: you configure the AI model connection and proxy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Built-in: bring your own model through standardized APIs</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_the_vision"><a class="anchor" href="#_the_vision"></a>The vision</h3>
+<div class="paragraph">
+<p>The automation orchestrator enables a new class of automation workflows where AI agents invoke governed automation through Ansible Automation Platform:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>AI decision nodes</strong> that analyze data and choose the next workflow path, with every decision audited</p>
+</li>
+<li>
+<p><strong>Human-in-the-loop gates</strong> where an operator reviews the AI&#8217;s recommendation before execution, with full context, not just stdout</p>
+</li>
+<li>
+<p><strong>Mixed workflows</strong> that combine Ansible playbooks, AI-driven decisions, external tools, and approval steps in a single visual workflow across Linux, network, and Windows infrastructure</p>
+</li>
+<li>
+<p><strong>Unified governance</strong> with user-scoped identity, RBAC, audit trails, and compliance across all automation types, deterministic and non-deterministic alike</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>What you built today is the foundation: AI agents interacting with Ansible Automation Platform via MCP, triggered by Event-Driven Ansible, operationalized through job templates. Every pattern you used in this module carries forward. The automation orchestrator makes that integration native, governed, and enterprise-ready.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Congratulations! You have completed the AI-Driven Incident Response module.</p>
+</div>
+<div class="paragraph">
+<p>You experienced three levels of AI-driven automation, each building on the last. As autonomy increased, governance remained constant:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Model</th>
+<th class="tableblock halign-left valign-top">AI autonomy</th>
+<th class="tableblock halign-left valign-top">Speed</th>
+<th class="tableblock halign-left valign-top">Governance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human-in-the-loop (Claude Code)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AI suggests, you decide</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interactive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User-scoped identity, RBAC, full audit trail</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Autonomous agents (CrewAI)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AI decides, AAP executes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minutes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User-scoped identity, RBAC, full audit trail</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operationalized (EDA + AI agents)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Platform detects and AI responds</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Seconds to minutes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User-scoped identity, RBAC, full audit trail</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The governance column is intentionally identical across all three rows. That is the point: Ansible Automation Platform enforces the same deterministic execution, access controls, and audit trail regardless of how much autonomy you grant the AI. You choose the level of autonomy your organization is ready for. The governance is non-negotiable.</p>
+</div>
+<div class="sect2">
+<h3 id="_the_core_principle"><a class="anchor" href="#_the_core_principle"></a>The core principle</h3>
+<div class="paragraph">
+<p>Across all three challenges, two principles remained constant:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>AI agents never touched infrastructure directly.</strong> Every operation (checking Apache status, restoring configurations, querying inventory) went through Ansible Automation Platform. The AI decided <strong>what</strong> to do. Ansible governed <strong>how</strong> it was done.</p>
+</li>
+<li>
+<p><strong>Governance never decreased as autonomy increased.</strong> Whether you drove the AI interactively, let agents act autonomously, or fully automated the pipeline with EDA, the same user-scoped identity, RBAC controls, and audit trails applied. More autonomy did not mean less oversight.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This is the pattern for enterprise AI-driven operations: AI handles the non-deterministic work: reasoning, triaging, deciding. Ansible handles the deterministic work: executing tested playbooks, enforcing access controls, recording audit trails. Together, they deliver autonomous operations with enterprise-grade trust.</p>
+</div>
+<div class="paragraph">
+<p>The automation orchestrator will make this integration native: visual workflow design, unified audit trails, and seamless human-in-the-loop gates, turning the creative engineering you saw today into governed, enterprise-ready simplicity.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_complete"><a class="anchor" href="#_complete"></a>Complete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Three takeaways from this module:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Ansible Automation Platform is the trusted execution layer for AI agents interacting with IT infrastructure.</strong> Agents reason and decide, but every action (restarting services, applying configurations, querying inventory) goes through Ansible with deterministic, auditable, and repeatable execution. No shadow access, no ad-hoc commands, no ungoverned AI.</p>
+</li>
+<li>
+<p><strong>AI-driven automation reduces mean time to repair without sacrificing compliance.</strong> From the moment an event fires to the moment a remediation completes, the entire pipeline is automated, audited, and governed under user-scoped identity and RBAC. Organizations get faster incident response while maintaining the compliance posture their security and audit teams require.</p>
+</li>
+<li>
+<p><strong>You can adopt agentic automation incrementally with the tools you already have.</strong> You do not need to wait for a new platform or rip out existing workflows. Event-Driven Ansible, job templates, and MCP work together today. Start with human-in-the-loop AI assistance, progress to autonomous agents when your organization is ready, and look ahead to the automation orchestrator for native integration, all on the same Ansible Automation Platform foundation.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Click the link below to proceed to the <strong>Summary and Call to Actions</strong>.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="module-07.html" class="query-params-link">4. Red Hat Lightspeed: CVE and Advisor Remediation</a></span>
+  <span class="next"><a href="module-10.html" class="query-params-link">Summary and Call to Actions</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>  </div>
+</main>
+</div>
+<footer class="footer">
+  <a href="https://demo.redhat.com" target="_blank" class="poweredBy"><p>Powered by</p><div class="labInfo_poweredBy" style="display: block; width: 260px;"><svg class="labInfo_poweredByLogo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1508.5 178.739"><g fill="#111"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#111"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#111" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">Demo Platform</tspan></text></svg></div></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

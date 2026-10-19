@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Section 1.1 - Instana Observability and Infrastructure Monitoring :: Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</title>
+    <link rel="canonical" href="https://github.com/rhpds/showroom_template_nookbag/modules/module-00-instana-part1.html">
+    <link rel="prev" href="index.html">
+    <link rel="next" href="module-00-instana-part2.html">
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://demo.redhat.com" target="_blank" style="margin-left: 5%;">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008.5 178.739" style="width: 200px;"><g fill="#fff"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#fff"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#e00" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">One</tspan></text></svg>
+      </a>
+      <a class="navbar-item site-title" target="__blank" style="color: #fff !important;" href="https://github.com/rhpds/showroom_template_nookbag">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item navbar-item-right-dropdown has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Links</a>
+          <div class="navbar-dropdown navbar-dropdown-right">
+            <a class="navbar-item navbar-item-right-content" href="https://redhat.com" target="_blank">Red Hat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="modules" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 1: IBM Instana Observability and Intelligent Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part2.html">1.2 Smart Alerts and Dual-Path Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 2: AIOps with Apache Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-01.html">2.1 Log Enrichment and Prompt Generation Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-02.html">2.2 Remediation Workflow</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 3: AIOps with Windows Automation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-06.html">3. Windows Events and AI-Driven Ticketing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 4: Red Hat Lightspeed and Agentic IDE Workflow</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 5: AI-Driven Incident Response</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-09.html">5. AI Agents and AAP via MCP</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-10.html">Summary and Call to Actions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Dev Mode</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-03.html">Section 2.1 - Splunk for Network Observability</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-04.html">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-05.html">Section 2.3 - Network Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-08.html">Autonomous AIOps: Self-Healing RHEL with Splunk</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="attrs-page.html">Attributes Page</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></li>
+    <li>Section 1: IBM Instana Observability and Intelligent Remediation</li>
+    <li><a href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Section 1.1 - Instana Observability and Infrastructure Monitoring</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Estimated time: 15-20 minutes</strong></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_objective"><a class="anchor" href="#_objective"></a>Objective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this section, we will explore <strong>IBM Instana</strong>, an enterprise-grade observability platform that provides real-time monitoring, intelligent alerting, and automated incident detection. This section demonstrates how observability platforms integrate with Ansible Automation Platform for intelligent remediation workflows.</p>
+</div>
+<div class="paragraph">
+<p>Instana continuously monitors your infrastructure and applications, detecting anomalies automatically. When issues occur, it generates alerts that trigger automated remediation through Event-Driven Ansible, creating a complete closed-loop AIOps workflow.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learning_objectives"><a class="anchor" href="#_learning_objectives"></a>Learning Objectives</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After completing this module, you will be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Navigate the Instana observability platform and understand its core components</p>
+</li>
+<li>
+<p>Locate your own monitored host in the infrastructure map using your zone</p>
+</li>
+<li>
+<p>Understand distributed tracing and service metrics through the Services tab</p>
+</li>
+<li>
+<p>Read an Instana Smart Alert webhook payload and understand which fields drive automation</p>
+</li>
+<li>
+<p>Describe the two remediation paths used in this lab and when each applies</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_what_is_instana"><a class="anchor" href="#_what_is_instana"></a>What is Instana?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Instana is an observability and application performance monitoring (APM) platform that provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Full-stack observability</strong>: Monitor infrastructure, containers, applications, and synthetic transactions</p>
+</li>
+<li>
+<p><strong>Automated discovery</strong>: Automatically detects and monitors services, dependencies, and infrastructure</p>
+</li>
+<li>
+<p><strong>Smart Alerts</strong>: Detects anomalies in service behavior and raises incidents</p>
+</li>
+<li>
+<p><strong>Action Catalog</strong>: Imports Ansible Automation Platform job templates and recommends them against live incidents</p>
+</li>
+<li>
+<p><strong>Closed-loop remediation</strong>: Triggers automated responses through webhooks and API calls</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this lab, Instana monitors a <strong>Flask web application</strong> running on <code>node2</code>. The Instana agent collects metrics about service latency, error rates, throughput (calls), and infrastructure health. When the application stops responding and calls drop to zero, Instana detects the anomaly and sends a webhook to Event-Driven Ansible, which triggers remediation in Ansible Automation Platform.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_architecture_overview"><a class="anchor" href="#_lab_architecture_overview"></a>Lab Architecture Overview</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">┌─────────────────────────────────────────────────────────┐
+│ IBM Instana (shared, on-premise)                        │
+│                                                         │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐   │
+│  │ Infra Map   │  │ Services Tab │  │ Smart Alerts  │   │
+│  │ (zones)     │  │ (Flask app)  │  │ (webhook)     │   │
+│  └─────────────┘  └──────────────┘  └───────────────┘   │
+│  ┌───────────────────────────────────────────────────┐  │
+│  │ Action Catalog (job templates imported from AAP)  │  │
+│  └───────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+            │                                  │
+   Path 1   │ webhook POST                     │ Path 2
+            │ issue.state=OPEN                 │ operator runs
+            v                                  │ action from UI
+┌─────────────────────────────────────────┐    │
+│ Event-Driven Ansible (on the controller)│    │
+│ Rulebook activation: Instana AIOps      │    │
+│ Webhook listener on port 5000           │    │
+│  - matches issue.state == "OPEN"        │    │
+│  - derives your guid from entityLabel   │    │
+│  - launches the Restore job template    │    │
+└─────────────────────────────────────────┘    │
+            │                                  │
+            v                                  v
+┌─────────────────────────────────────────────────────────┐
+│ Ansible Automation Platform                             │
+│ Organization: Instana AIOps                             │
+│ Runs: INSTANA | &lt;guid&gt; | Restore Web App Service        │
+└─────────────────────────────────────────────────────────┘
+                            │
+                            v
+┌─────────────────────────────────────────────────────────┐
+│ RHEL node 2 (your application host)                     │
+│ - lab-webapp service started                            │
+│ - calls resume                                          │
+│ - Instana closes the alert automatically                │
+└─────────────────────────────────────────────────────────┘</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Both paths end in the same place: a job template in Ansible Automation Platform. Only the trigger differs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_accessing_instana"><a class="anchor" href="#_accessing_instana"></a>Accessing Instana</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instana URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://unit0-techzone.163-66-82-253.nip.io/" target="_blank" rel="noopener">Instana UI</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>admin@instana.local</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provided by your instructor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your zone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my-guid</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your service name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>lab-webapp-my-guid</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This Instana instance is <strong>shared across all students in this workshop</strong>. Every participant logs in with the same account and sees the same infrastructure map, service list, and Action Catalog.</p>
+</div>
+<div class="paragraph">
+<p>Everything you create must be named with your own <code>my-guid</code> so you can find it again, and so you do not disturb anyone else. Do not delete or modify alerts, channels, or actions belonging to other students, or any that do not carry your own <code>my-guid</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_step_1_log_into_instana"><a class="anchor" href="#_step_1_log_into_instana"></a>Step 1: Log Into Instana</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open the Instana URL above in a new browser tab</p>
+</li>
+<li>
+<p>Log in with the credentials provided by your instructor</p>
+</li>
+<li>
+<p>Click <strong>Infrastructure</strong> in the left navigation to open the map</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_understanding_instana_components"><a class="anchor" href="#_understanding_instana_components"></a>Understanding Instana Components</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_1_infrastructure_map_zones"><a class="anchor" href="#_1_infrastructure_map_zones"></a>1. Infrastructure Map (zones)</h3>
+<div class="paragraph">
+<p>The infrastructure map shows all monitored hosts, grouped into <strong>zones</strong>. In this workshop, zones are the <strong>student separation layer</strong>: every student environment reports into its own zone, named after that student&#8217;s <code>my-guid</code>. Your lab&#8217;s RHEL node2 — the host running the Flask web application — shows up in the map attached to your <code>my-guid</code> as its zone, together with the Instana agent and every process it discovers on that host.</p>
+</div>
+<div class="paragraph">
+<p><strong>Your zone name is</strong>: <code>my-guid</code></p>
+</div>
+<div class="sect3">
+<h4 id="_exploring_your_zone"><a class="anchor" href="#_exploring_your_zone"></a>Exploring your zone</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the Instana UI, click <strong>Infrastructure</strong> in the left navigation menu</p>
+</li>
+<li>
+<p>Locate the tower labelled <code>my-guid</code> in the map — this is your host, and everything inside it belongs to your lab environment</p>
+</li>
+<li>
+<p>The tower represents the RHEL host <code>node2</code>, where the Instana agent and the Flask application (<code>lab-webapp</code>) are running</p>
+</li>
+<li>
+<p>Confirm the agent shows as <strong>online</strong>; if your zone is not visible yet, allow 2-3 minutes after lab start for the agent to register and refresh the map</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/instana_infra_map_zone.png" target="blank"><img src="_images/instana_infra_map_zone.png" alt="Instana Infrastructure Map"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Hovering over the tower shows the agents and processes reporting from the host. Clicking it opens the host details, where you can see the individual processes discovered on <code>node2</code> — including the Python process behind <code>lab-webapp</code>. To see CPU and memory metrics, click <strong>Open Dashboard</strong> on the host details page.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Searching the infrastructure map with a query such as <code>entity.zone:my-guid</code> does <strong>not</strong> filter reliably for host agents in this environment. Find your zone visually in the map instead, or skip straight to the Services tab, where your service name already contains your <code>my-guid</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_services_tab"><a class="anchor" href="#_2_services_tab"></a>2. Services tab</h3>
+<div class="paragraph">
+<p>The <strong>Services</strong> tab lists monitored applications and their performance metrics. Your Flask application is registered as <code>lab-webapp-my-guid</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_exploring_your_service"><a class="anchor" href="#_exploring_your_service"></a>Exploring your service</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click <strong>Applications</strong> in the left navigation menu, then click <strong>Services</strong></p>
+</li>
+<li>
+<p>Search for <code>my-guid</code> to filter the list down to your own service</p>
+</li>
+<li>
+<p>Click <code>lab-webapp-my-guid</code> to open its details</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/instana_services_tab.png" target="blank"><img src="_images/instana_services_tab.png" alt="Instana Services"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Opening a service shows its metrics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Calls</strong>: HTTP request throughput, which should be continuous while the lab is healthy</p>
+</li>
+<li>
+<p><strong>Latency</strong>: response time metrics</p>
+</li>
+<li>
+<p><strong>Error rate</strong>: percentage of failed requests</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Individual request traces are covered in the next section.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>A traffic generator runs continuously on the bastion and calls the Flask application&#8217;s <code>/health</code> endpoint every few seconds. This matters: the alert used in this lab fires when the call rate drops to zero. Without a steady baseline of traffic there is nothing to drop, and no alert would ever fire.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_distributed_tracing"><a class="anchor" href="#_distributed_tracing"></a>Distributed tracing</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>While viewing your service, open the <strong>Traces</strong> view</p>
+</li>
+<li>
+<p>You will see individual HTTP GET requests to <code>/health</code> from the traffic generator</p>
+</li>
+<li>
+<p>Click a trace to see the full execution flow, response time, and any errors</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The Python Instana SDK is loaded by the Flask application, so these traces are produced by real instrumentation rather than synthetic checks.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_smart_alerts"><a class="anchor" href="#_3_smart_alerts"></a>3. Smart Alerts</h3>
+<div class="paragraph">
+<p>Smart Alerts monitor a service and raise an incident when its behaviour changes. In this lab we use a Smart Alert on the <strong>Throughput</strong> (calls) metric:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Metric</strong>: calls (throughput)</p>
+</li>
+<li>
+<p><strong>Condition</strong>: operator <code>&lt;</code>, <strong>Critical</strong> enabled with numeric value <code>1</code>, and <strong>Warning</strong> disabled; the condition is calls below one per minute</p>
+</li>
+<li>
+<p><strong>Time threshold</strong>: a 1-minute evaluation window and one consecutive violation (1 minute of persistence)</p>
+</li>
+<li>
+<p><strong>Grace period</strong>: 1 minute after persistence is set, so the incident closes shortly after traffic resumes</p>
+</li>
+<li>
+<p><strong>Scope</strong>: <strong>Per service for this application perspective</strong>, with the Application Perspective containing only <code>lab-webapp-my-guid</code></p>
+</li>
+<li>
+<p><strong>Channel</strong>: a generic webhook pointing at your Event-Driven Ansible listener</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Smart Alerts cannot be attached straight to a service. They are always created in the context of an <strong>Application Perspective</strong>, a scoped view of one or more services. In the next module you will therefore build the alert in two stages: first an Application Perspective wrapping your service, then the Smart Alert inside it.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The alert has two states that matter to automation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>OPEN</strong>: the service is down and remediation should run</p>
+</li>
+<li>
+<p><strong>CLOSED</strong>: the service has recovered and the incident is resolved</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Instana Smart Alerts can use machine learning baselines, but in this lab we set an explicit <code>&lt; 1</code> threshold. It is deterministic, which makes the exercise reproducible inside a short workshop slot.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_instana_webhook_payload"><a class="anchor" href="#_the_instana_webhook_payload"></a>The Instana Webhook Payload</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When the Smart Alert fires, Instana sends an HTTP POST to the configured channel. The following payload was captured from a real alert in this lab environment:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">issue:
+  state: OPEN                                 # OPEN when raised, CLOSED when resolved
+  type: incident
+  severity: 10
+  entity: Service
+  entityLabel: lab-webapp-ds2nq               # service name, ends with the student guid
+  metricName: calls
+  metric: "0.000"                             # current value: no calls at all
+  thresholdValue: "1.0"
+  calls: "0.000 &lt; 1.000"
+  text: Number of calls is anomalously low    # human readable alert text
+  link: https://unit0-techzone.../events;eventId=...
+  start: 1791404942004
+  zone: not available                         # service-scoped alerts carry no zone</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Three fields drive the automation:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>issue.state</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The rulebook only acts on <code>OPEN</code>. <code>CLOSED</code> is logged so you can see recovery.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>issue.entityLabel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Carries your <code>my-guid</code> as a suffix. The rulebook strips <code>lab-webapp-</code> from it to work out which student&#8217;s job template to launch.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>issue.text</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Number of calls is anomalously low". This text is what the Action Catalog matches job templates against in Path 2.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>One more field worth knowing: <code>issue.severity</code> is <code>10</code> for Critical alerts like the one you will create, and <code>5</code> for Warning. The rulebook in this lab does not use it, but it is useful for filtering events in the activation history.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The payload sent by the <strong>Test channel</strong> button in the Instana channel configuration is a <code>change</code> event and contains <strong>no</strong> <code>state</code> field. The rulebook condition is <code>event.payload.issue.state == "OPEN"</code>, so a test alert will reach Event-Driven Ansible but will not launch a job. Only a real firing alert triggers remediation.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_two_paths_to_remediation"><a class="anchor" href="#_two_paths_to_remediation"></a>Two Paths to Remediation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This lab deliberately wires up two different ways to get from an Instana incident to an Ansible job. Both run the same job template in the end.</p>
+</div>
+<div class="sect2">
+<h3 id="_path_1_automated_remediation_through_event_driven_ansible"><a class="anchor" href="#_path_1_automated_remediation_through_event_driven_ansible"></a>Path 1: Automated remediation through Event-Driven Ansible</h3>
+<div class="paragraph">
+<p>Instana posts the alert to a webhook. The <strong>Instana AIOps</strong> rulebook activation running in Ansible Automation Platform matches the event and launches the restore job with no human involved:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- name: "Trigger AI remediation on Instana OPEN alert"
+  condition: event.payload.issue.state == "OPEN"
+  actions:
+    - run_job_template:
+        name: "INSTANA | {{ event.payload.issue.entityLabel | replace('lab-webapp-', '') }} | Restore Web App Service - Fix anomalously low calls"
+        organization: "Instana AIOps"
+        job_args:
+          limit: "node2"
+          extra_vars:
+            instana_entity_label: "{{ event.payload.issue.entityLabel }}"
+            instana_alert_text: "{{ event.payload.issue.text }}"
+            instana_metric: "{{ event.payload.issue.metric }}"
+            instana_alert_state: "{{ event.payload.issue.state }}"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note how the template name is built at runtime from <code>entityLabel</code>. With your service named <code>lab-webapp-my-guid</code>, the shared rulebook routes its alert to the restore template containing your <code>my-guid</code>. This naming convention is not an access-control check; keep your service and alert scoped to your own GUID.</p>
+</div>
+<div class="paragraph">
+<p><strong>Strengths</strong>: fastest possible response, no human in the loop, predictable for well-understood failures.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_path_2_operator_driven_remediation_through_the_action_catalog"><a class="anchor" href="#_path_2_operator_driven_remediation_through_the_action_catalog"></a>Path 2: Operator-driven remediation through the Action Catalog</h3>
+<div class="paragraph">
+<p>Instana polls Ansible Automation Platform and imports the job templates it is allowed to see into its <strong>Action Catalog</strong>. When an incident is open, Instana matches the incident text against the names and descriptions of those actions and surfaces the most relevant ones as recommendations. An operator picks one and runs it from the Instana UI.</p>
+</div>
+<div class="paragraph">
+<p><strong>Strengths</strong>: a human chooses between several candidate remediations, every run is attributable, and the decision is recorded.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In this workshop you will run the action from the Instana UI yourself — Section 1.2 walks you through it, including two cautions that matter in a shared instance: run only actions carrying your own <code>my-guid</code>, and commit the host limit properly before running. If you would rather not run anything, Section 1.2 also shows how to restore from Ansible Automation Platform instead.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_comparing_the_paths"><a class="anchor" href="#_comparing_the_paths"></a>Comparing the paths</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Aspect</th>
+<th class="tableblock halign-left valign-top">Path 1 (Event-Driven Ansible)</th>
+<th class="tableblock halign-left valign-top">Path 2 (Action Catalog)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trigger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Webhook from the Smart Alert</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operator clicks in the Instana UI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human involvement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Response time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Seconds after the alert fires</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">As fast as someone responds</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Best for</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Known, safe, repeatable fixes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ambiguous incidents, changes needing approval</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>These are complementary, not competing. A mature AIOps practice automates the failure modes it trusts and routes the rest to an operator with good recommendations attached.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You now understand:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>How Instana monitors hosts and services through its agent and the Python tracing SDK</p>
+</li>
+<li>
+<p>How to find your own zone and service in a shared Instana instance using your <code>my-guid</code></p>
+</li>
+<li>
+<p>What a Smart Alert webhook payload contains and which fields drive automation</p>
+</li>
+<li>
+<p>The two remediation paths this lab implements, and the trade-off between them</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In the next module you will create the alert channel and Smart Alert, break the service, and watch both paths run.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="index.html" class="query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></span>
+  <span class="next"><a href="module-00-instana-part2.html" class="query-params-link">1.2 Smart Alerts and Dual-Path Remediation</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>  </div>
+</main>
+</div>
+<footer class="footer">
+  <a href="https://demo.redhat.com" target="_blank" class="poweredBy"><p>Powered by</p><div class="labInfo_poweredBy" style="display: block; width: 260px;"><svg class="labInfo_poweredByLogo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1508.5 178.739"><g fill="#111"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#111"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#111" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">Demo Platform</tspan></text></svg></div></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

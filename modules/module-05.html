@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Section 2.3 - Network Workflow :: Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</title>
+    <link rel="canonical" href="https://github.com/rhpds/showroom_template_nookbag/modules/module-05.html">
+    <link rel="prev" href="module-04.html">
+    <link rel="next" href="module-08.html">
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://demo.redhat.com" target="_blank" style="margin-left: 5%;">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008.5 178.739" style="width: 200px;"><g fill="#fff"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#fff"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#e00" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">One</tspan></text></svg>
+      </a>
+      <a class="navbar-item site-title" target="__blank" style="color: #fff !important;" href="https://github.com/rhpds/showroom_template_nookbag">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item navbar-item-right-dropdown has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Links</a>
+          <div class="navbar-dropdown navbar-dropdown-right">
+            <a class="navbar-item navbar-item-right-content" href="https://redhat.com" target="_blank">Red Hat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="modules" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 1: IBM Instana Observability and Intelligent Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part2.html">1.2 Smart Alerts and Dual-Path Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 2: AIOps with Apache Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-01.html">2.1 Log Enrichment and Prompt Generation Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-02.html">2.2 Remediation Workflow</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 3: AIOps with Windows Automation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-06.html">3. Windows Events and AI-Driven Ticketing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 4: Red Hat Lightspeed and Agentic IDE Workflow</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 5: AI-Driven Incident Response</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-09.html">5. AI Agents and AAP via MCP</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-10.html">Summary and Call to Actions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Dev Mode</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-03.html">Section 2.1 - Splunk for Network Observability</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-04.html">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="module-05.html">Section 2.3 - Network Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-08.html">Autonomous AIOps: Self-Healing RHEL with Splunk</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="attrs-page.html">Attributes Page</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></li>
+    <li>Dev Mode</li>
+    <li><a href="module-05.html">Section 2.3 - Network Workflow</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Section 2.3 - Network Workflow</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/network-aiops-workflow.png" target="blank"><img src="_images/network-aiops-workflow.png" alt="Network AI Workflow"></a>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_learning_objectives"><a class="anchor" href="#_learning_objectives"></a>Learning Objectives</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After completing this module, you will be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Execute AI-driven network troubleshooting workflows for OSPF failures</p>
+</li>
+<li>
+<p>Use Red Hat AI to generate network remediation playbooks from natural language prompts</p>
+</li>
+<li>
+<p>Run AI-generated playbooks in check mode to validate changes before applying them</p>
+</li>
+<li>
+<p>Troubleshoot three common OSPF failure scenarios (interface down, network type mismatch, hello timer mismatch)</p>
+</li>
+<li>
+<p>Review and approve AI-generated network automation code through human-in-the-loop validation</p>
+</li>
+<li>
+<p>Verify OSPF neighbor adjacency restoration using Splunk dashboards</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_challenges"><a class="anchor" href="#_challenges"></a>Challenges</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The essence of the following scenarios is to empower a network expert to translate their manual OSPF troubleshooting rationale into intelligent, automated playbooks. Using a development pipeline, the expert creates and refines prompts for Red Hat AI to generate the necessary automation code. To ensure safety and accuracy, a workflow allows the expert to first run each AI-generated playbook in check mode. This provides an opportunity to review and approve the proposed changes before they are applied to production. If a playbook doesn&#8217;t work as intended, the expert can simply continue to refine their prompt in this iterative cycle until the desired outcome is achieved.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Challenge 1: OSPF neighbor down due to interface shut</p>
+</li>
+<li>
+<p>Challenge 2: OSPF neighbor down due to incorrect OSPF network type</p>
+</li>
+<li>
+<p>Challenge 3: OSPF neighbor down due to hello timer mismatch</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_challenge_1_ospf_neighbor_down_due_to_interface_shut"><a class="anchor" href="#_2_challenge_1_ospf_neighbor_down_due_to_interface_shut"></a>2 - Challenge 1: OSPF neighbor down due to interface shut</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In this first scenario we will cause an OSPF neighbor down by intentionally shutting down the OSPF interface (Tunnel0 on cisco-rtr1).</p>
+</div>
+<div class="sect2">
+<h3 id="_step_2_1_1_review_the_playbook_network_aiops_yml"><a class="anchor" href="#_step_2_1_1_review_the_playbook_network_aiops_yml"></a>Step 2.1.1: Review the playbook (network_aiops.yml)</h3>
+<div class="paragraph">
+<p>The playbook can be reviewed in its entirety here: <a href="https://github.com/ansible-tmm/aiops-summitlab/blob/main/playbooks/network_aiops.yml" target="_blank" rel="noopener">network_aiops.yml on GitHub</a></p>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Tip:</strong> All playbooks and rulebooks used in this lab are available in the GitHub repository at <a href="https://github.com/ansible-tmm/aiops-summitlab" target="_blank" rel="noopener">github.com/ansible-tmm/aiops-summitlab</a>. You can review the complete source code there at any time.
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+<strong>Note:</strong> The following snippets explain how this playbook uses the uri module and prompt variable to interact with the Red Hat AI to create an effective playbook for OSPF remediation. Not every task is explained in detail.
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_aiops_yml_vars"><a class="anchor" href="#_aiops_yml_vars"></a>AIOps.yml - Vars</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+- name: Interact with Ansible Lightspeed API
+  hosts: localhost
+  gather_facts: false
+  vars:
+    lightspeed_prompt: |
+     "Create a playbook and name it 'OSPF Fix'
+     host ==  cisco-rtr1
+     create a task that shows the status of Tunnel0 and register the output
+     run a new task that administratively enables interface for parent interface tunnel0 when stdout contains 'administratively down'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above playbook snippet the network engineer is articulating the requirements for the playbook as a multi-line prompt variable. This portion of the prompt is focused on scenario-1. Here we are asking for a playbook to identify when the OSPF interface is down and remediate with a <code>no shut</code>
+=== AIOps.yml - Tasks</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"> - name: Send request to AI API
+      ansible.builtin.uri:
+        url: "https://c.ai.ansible.redhat.com/api/v0/ai/generations/"
+        method: POST
+        headers:
+          Content-Type: "application/json"
+          Authorization: "Bearer {{ lightspeed_token }}"
+        body_format: json
+        body:
+          text: "{{ lightspeed_prompt }}"
+      register: response</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This above snippet is using the URI module to send the prompt to the Red Hat AI</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">- name: Set fact for Red Hat AI generated playbook
+      ansible.builtin.set_fact:
+        lightspeed_playbook: "{{ response.json.playbook | from_yaml }}"
+
+- name: Save formatted YAML response to file
+      ansible.builtin.copy:
+        content: "{{ lightspeed_playbook | to_nice_yaml(sort_keys=False) }}"
+        dest: "{{ repository['path'] }}/playbooks/lightspeed-response.yml"
+        mode: '0644'
+
+- name: Publish the changes
+    ansible.scm.git_publish:
+    path: "{{ repository['path'] }}"
+    user:
+        name: lab-user
+        email: lab-user@example.org
+    delegate_to: localhost
+    run_once: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The preceding tasks convert the AI response into a YAML playbook named <code>lightspeed-response.yml</code>. The final task then pushes this file to the Gitea repository, making the new playbook available for execution within the workflow.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: Access the terminal to Shut the OSPF interface</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+This portion of the lab will trigger the Closed loop operation.
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion.png" target="blank"><img src="_images/bastion.png" alt="bastion" width="150%"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSH password=<code>ansible123!</code></p>
+</li>
+<li>
+<p>SSH into cisco-rtr1 and add the following commands</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">ssh admin@cisco-rtr1
+config t
+int tu 0
+shut</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 3: Open the AAP tab and verify a running job for the <strong>Network-AIOps-Workflow</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion2.png" target="blank"><img src="_images/bastion2.png" alt="AAP" width="150%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_1.png" target="blank"><img src="_images/workflow_job_1.png" alt="Workflow 1" width="150%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 4: Review the <code>Create Playbook AI</code> job-template</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_2.png" target="blank"><img src="_images/workflow_job_2.png" alt="Workflow 1" width="150%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can click on the icon and glean from the output the proposed playbook created by Ansible Lighspeed AI.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_3.png" target="blank"><img src="_images/workflow_job_3.png" alt="Workflow 1" width="150%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The tasks shown above were generated by Red Hat AI in response to our prompt for remediating an OSPF down issue for scenario-1. The logic is straightforward: when a conditional task confirms the interface is administratively down, a subsequent task is run to re-enable it with the no shutdown command. The rest of the playbook has been truncated for brevity, as it pertains to later scenarios.</p>
+</div>
+<div class="paragraph">
+<p>Step 5: Review the <code>lightspeed_response</code> playbook in the Gitea repository</p>
+</div>
+<div class="paragraph">
+<p>You should see a recently updated file for <code>lightspeed-response.yml</code> in the <code>lightspeed-playbooks</code> repository. Now that this playbook is updated in the Gitea repo it becomes available to run in subsequent workflow steps.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_gitea"><a class="anchor" href="#_accessing_gitea"></a>Accessing Gitea</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gitea URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{gitea_url}" target="_blank" rel="noopener">Gitea Web UI</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{gitea_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{gitea_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/lightspeed_gitea.png" target="blank"><img src="_images/lightspeed_gitea.png" alt="Lightspeed Gitea" width="160%"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Important</strong>: The AI-generated playbook content may vary from run to run based on how Red Hat AI interprets the prompt. If the playbook in your Gitea repository doesn&#8217;t exactly match what you expected, this is normal behavior. The key is to verify that the logic and tasks align with the remediation goal (bringing up the Tunnel0 interface when it&#8217;s administratively down). You can review the playbook content before proceeding with the workflow execution.
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Step 6: Review the <code>Playbook-Check-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-playbook-check.png" target="blank"><img src="_images/workflow-playbook-check.png" alt="Playbook Checkmode" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. Note, this job-template and playbook is set to <code>check-mode</code> so the <code>fix</code> is not applied to cisco-rtr1 at the moment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed1.png" target="blank"><img src="_images/workflow-changed1.png" alt="Change 160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the when the playbook is run again in <code>run mode</code> it would <code>Change</code> the configuration by applying the following CLI configuration.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed2.png" target="blank"><img src="_images/workflow-changed2.png" alt="Change 2" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 7: Return to Splunk to verify the OSPF neighbor is still down
+=== Accessing Splunk</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Splunk URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{splunk_url}" target="_blank" rel="noopener">Splunk</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/routing_dashboard1.png" target="blank"><img src="_images/routing_dashboard1.png" alt="Routing" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/routing_dash_down.png" target="blank"><img src="_images/routing_dash_down.png" alt="Splunk Dashboard" width="260%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 8: Human Review
+The <strong>Network-AIOps-Workflow</strong> Should be in a paused state until we approve, deny or cancel. If your workflow has succeeded thus far, it&#8217;s okay to approve the workflow, at this time.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-approve.png" target="blank"><img src="_images/workflow-approve.png" alt="Approve 160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/approve.png" target="blank"><img src="_images/approve.png" alt="Approval" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 9: Review the <code>Playbook-Run-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-run.png" target="blank"><img src="_images/workflow-run.png" alt="Playbook run" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. This time the job-template and playbook was set to <code>run-mode</code> so the <code>fix</code> is applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed1.png" target="blank"><img src="_images/workflow-changed1.png" alt="Change 160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the CLI configuration that was applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed2.png" target="blank"><img src="_images/workflow-changed2.png" alt="Change 260%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 10: Return to Splunk to verify the OSPF neighbor is now up with a full adjacency.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_splunk"><a class="anchor" href="#_accessing_splunk"></a>Accessing Splunk</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Splunk URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{splunk_url}" target="_blank" rel="noopener">Splunk</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/routing_dashboard2.png" target="blank"><img src="_images/routing_dashboard2.png" alt="Routing Dash" width="160%"></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_challenge_2_ospf_neighbor_down_due_to_incorrect_ospf_network_type"><a class="anchor" href="#_2_challenge_2_ospf_neighbor_down_due_to_incorrect_ospf_network_type"></a>2 - Challenge 2: OSPF neighbor down due to incorrect OSPF network type</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For scenario two, we&#8217;ll break OSPF by misconfiguring the network type on cisco-rtr1&#8217;s Tunnel0 interface. This creates a subtle failure where the OSPF neighbor goes down while the interface itself stays up. Therefore, our AI prompt must be more detailed to account for this protocol-level issue, not just a simple interface status change.</p>
+</div>
+<div class="paragraph">
+<p>Step 1: Review the playbook (aiops.yml)
+The playbook can be reviewed in its entirety here: <a href="https://github.com/ansible-tmm/aiops-summitlab/blob/main/playbooks/network_aiops.yml" target="_blank" rel="noopener">network_aiops.yml on GitHub</a></p>
+</div>
+<div class="paragraph">
+<p>user=lab-user</p>
+</div>
+<div class="paragraph">
+<p>password="{{ common_password }}"</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+Note: The following snippets explain how this playbook uses the uri module and prompt variable to interact with the Red Hat AI to create an effective playbook for OSPF remediation. Not every task is explained in detail.
+</blockquote>
+</div>
+<div class="sect2">
+<h3 id="_aiops_yml"><a class="anchor" href="#_aiops_yml"></a>AIOps.yml</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+- name: Interact with Ansible Lightspeed API
+  hosts: localhost
+  gather_facts: false
+  vars:
+    lightspeed_prompt: |
+     "Create a playbook and name it 'OSPF Fix'
+     host ==  cisco-rtr1
+     create a task that shows the status of Tunnel0 and register the output
+     run a new task that administratively enables interface for parent interface tunnel0 when stdout contains 'administratively down'</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Additions for Challenge 2---&gt;</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">    run a new task when the previous output contains 'line protocol is up' in stdout[0] in this task do a 'show ip ospf interface tunnel0' and register as new_output
+    run a new task with a list of two conditionals. The first condition is output contains 'line protocol is up' in stdout[0] and second condition is when new_output doesn't contain 'Network Type POINT_TO_POINT' This task would then configure interface tunnel0 with the command 'ip ospf network type point_to_point'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above playbook snippet the network engineer has additional requirements added to the multi-line prompt variable. This portion of the prompt is focused on scenario-2. Here we are asking for a playbook to identify when the OSPF interface is up but missing the correct OSPF Network Type POINT_TO_POINT.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: Change the OSPF Network Type</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion.png" target="blank"><img src="_images/bastion.png" alt="bastion" width="160%"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSH password=<code>ansible123!</code></p>
+</li>
+<li>
+<p>SSH into cisco-rtr1 and add the following commands</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">ssh admin@cisco-rtr1
+config t
+int tu 0
+ip ospf network non-broadcast
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 3: Verify that the interface Tunnel0 is up but the OSPF neighbor is down</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">show ip int br tu0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Interface              IP-Address      OK? Method Status                Protocol
+Tunnel0                10.100.100.1    YES manual up                    up</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">show ip ospf neighbor</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output when neighbor is down:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(no output)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 4: Open the AAP tab and verify a running job for the <strong>Network-AIOps-Workflow</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion2.png" target="blank"><img src="_images/bastion2.png" alt="AAP" width="150%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_1.png" target="blank"><img src="_images/workflow_job_1.png" alt="Workflow 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 4: Review the <code>Create Playbook AI</code> job-template</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_2.png" target="blank"><img src="_images/workflow_job_2.png" alt="Workflow 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can click on the icon and glean from the output the proposed playbook created by Ansible Lighspeed AI.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+Click here in AAP to review the playbook
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/display_2.png" target="blank"><img src="_images/display_2.png" alt="Display" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_5.png" target="blank"><img src="_images/workflow_job_5.png" alt="Workflow 4" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>For brevity, the previous <code>scenario(1-2)</code> tasks were truncated. The specific tasks shown above were generated by Red Hat AI specifically for remediating an OSPF down issue for <code>scenario-3</code>. The logic is straightforward: when a conditional task confirms the interface is administratively up and the network type is correct, but the OSPF Hello timer (interval) is incorrect, a subsequent task is run to determine if the OSPF network type is correct. If Network type Point-to-Point is not configure it will correct the configuration.</p>
+</div>
+<div class="paragraph">
+<p>Step 5: Review the <code>Playbook-Check-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-playbook-check.png" target="blank"><img src="_images/workflow-playbook-check.png" alt="Playbook Checkmode" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. Note, this job-template and playbook is set to <code>check-mode</code> so the <code>fix</code> is not applied to cisco-rtr1 at the moment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed4.png" target="blank"><img src="_images/workflow-changed4.png" alt="Change 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the when the playbook is run again in <code>run mode</code> it would <code>Change</code> the configuration by applying the following CLI configuration.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed3.png" target="blank"><img src="_images/workflow-changed3.png" alt="Change 2" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 6: Return to Splunk to verify the OSPF neighbor is still down
+=== Accessing Splunk</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Splunk URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{splunk_url}" target="_blank" rel="noopener">Splunk</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{splunk_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/routing_dashboard1.png" target="blank"><img src="_images/routing_dashboard1.png" alt="Routing" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/routing_dash_down.png" target="blank"><img src="_images/routing_dash_down.png" alt="Splunk Dashboard" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 8: Human Review
+The <strong>Network-AIOps-Workflow</strong> Should be in a paused state until we approve, deny or cancel. If your workflow has succeeded thus far, it&#8217;s okay to approve the workflow, at this time.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-approve.png" target="blank"><img src="_images/workflow-approve.png" alt="Approve 3" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/approve.png" target="blank"><img src="_images/approve.png" alt="Approval" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 9: Review the <code>Playbook-Run-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-run.png" target="blank"><img src="_images/workflow-run.png" alt="Playbook run" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. This time the job-template and playbook was set to <code>run-mode</code> so the <code>fix</code> is applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed4.png" target="blank"><img src="_images/workflow-changed4.png" alt="Change 3" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the CLI configuration that was applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed3.png" target="blank"><img src="_images/workflow-changed3.png" alt="Change 2" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 10: Return to cisco-rtr1 to verify the OSPF adjacency is full.
+This time we will check the status from the router to ensure the OSPF network type == POINT-TO-POINT</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion.png" target="blank"><img src="_images/bastion.png" alt="bastion" width="160%"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSH password=<code>ansible123!</code></p>
+</li>
+<li>
+<p>SSH into cisco-rtr1 and add the following commands</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">ssh admin@cisco-rtr1
+sh ip ospf neighbor</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Neighbor ID     Pri   State           Dead Time   Address         Interface
+192.168.2.2       0   FULL/  -        00:00:33    10.100.100.2    Tunnel0</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">sh ip ospf int tu0 | s Type</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  Process ID 1, Router ID 192.168.1.1, Network Type POINT_TO_POINT, Cost: 1000</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_challenge_3_ospf_neighbor_down_due_to_hello_timer_mismatch"><a class="anchor" href="#_2_challenge_3_ospf_neighbor_down_due_to_hello_timer_mismatch"></a>2 - Challenge 3: OSPF neighbor down due to hello timer mismatch</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For scenario three, we&#8217;ll break OSPF by misconfiguring the hello timer on cisco-rtr1&#8217;s Tunnel0 interface. This creates a subtle failure where the OSPF neighbor goes down while the interface itself stays up. Therefore, our AI prompt must be more detailed to account for this protocol-level issue, not just a simple interface status change.</p>
+</div>
+<div class="paragraph">
+<p>Step 1: Review the playbook (aiops.yml)
+The playbook can be reviewed in its entirety here: <a href="https://github.com/ansible-tmm/aiops-summitlab/blob/main/playbooks/network_aiops.yml" target="_blank" rel="noopener">network_aiops.yml on GitHub</a></p>
+</div>
+<div class="paragraph">
+<p>user=lab-user</p>
+</div>
+<div class="paragraph">
+<p>password="{{ common_password }}"</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+Note: The following snippets explain how this playbook uses the uri module and prompt variable to interact with the Red Hat AI to create an effective playbook for OSPF remediation. Not every task is explained in detail.
+</blockquote>
+</div>
+<div class="sect2">
+<h3 id="_aiops_yml_2"><a class="anchor" href="#_aiops_yml_2"></a>AIOps.yml</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+- name: Interact with Ansible Lightspeed API
+  hosts: localhost
+  gather_facts: false
+  vars:
+    lightspeed_prompt: |
+     "Create a playbook and name it 'OSPF Fix'
+     host ==  cisco-rtr1
+     create a task that shows the status of Tunnel0 and register the output
+     run a new task that administratively enables interface for parent interface tunnel0 when stdout contains 'administratively down'
+     run a new task when the previous output contains 'line protocol is up' in stdout[0] in this task do a 'show ip ospf interface tunnel0' and register as new_output
+     run a new task with a list of two conditionals. The first condition is output contains 'line protocol is up' in stdout[0] and second condition is when new_output doesn't contain 'Network Type POINT_TO_POINT' This task would then ⚙️ configure interface tunnel0 with the command 'ip ospf network type point_to_point'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Additions for Challenge 3--&#8594;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">run a new task with a list of three conditionals. The first condition is output contains 'line protocol is up' in stdout[0] and second condition is when new_output does contain 'Network Type POINT_TO_POINT' the third condition is when new_output doesn't contain 'Hello 10' This task would then ⚙️ configure interface tunnel0 with the command 'ip ospf hello-interval 10'"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above playbook snippet the network engineer has additional requirements added to the multi-line prompt variable. This portion of the prompt is focused on scenario-3. Here we are asking for a playbook to identify when the OSPF interface is up, has the correct network type, but the Hello timer is misconfigured.</p>
+</div>
+<div class="paragraph">
+<p>Step 2: Change the OSPF Hello Timer</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion.png" target="blank"><img src="_images/bastion.png" alt="bastion" width="160%"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSH password=<code>ansible123!</code></p>
+</li>
+<li>
+<p>SSH into cisco-rtr1 and add the following commands</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">ssh admin@cisco-rtr1
+config t
+int tu 0
+ip ospf hello-interval 30
+end</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 3: Verify that the interface Tunnel0 is up but the OSPF neighbor is down</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">show ip int br tu0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Interface              IP-Address      OK? Method Status                Protocol
+Tunnel0                10.100.100.1    YES manual up                    up</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">show ip ospf neighbor</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Expected output when neighbor is down:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(no output)</pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Note</strong>: In some cases, you may still see OSPF neighbor output even after changing the hello timer. This can happen if the OSPF adjacency hasn&#8217;t fully timed out yet (dead interval is typically 40 seconds). If you see neighbor output, wait a few moments and check again. The neighbor state should eventually transition to down once the dead timer expires.
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Step 4: Open the AAP tab and verify a running job for the <strong>Network-AIOps-Workflow</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion2.png" target="blank"><img src="_images/bastion2.png" alt="AAP" width="150%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_1.png" target="blank"><img src="_images/workflow_job_1.png" alt="Workflow 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 4: Review the <code>Create Playbook AI</code> job-template</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_2.png" target="blank"><img src="_images/workflow_job_2.png" alt="Workflow 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can click on the icon and glean from the output the proposed playbook created by Ansible Lighspeed AI.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+Click here in AAP to review the playbook
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/display_2.png" target="blank"><img src="_images/display_2.png" alt="Display" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow_job_5.png" target="blank"><img src="_images/workflow_job_5.png" alt="Workflow 4" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>For brevity, the previous <code>scenario-1</code> tasks were truncated. The specific tasks shown above were generated by Red Hat AI specifically for remediating an OSPF down issue for <code>scenario-2</code>. The logic is straightforward: when a conditional task confirms the interface is administratively up but the OSPF neighbor is down, a subsequent task is run to determine if the OSPF network type is correct. If Network type Point-to-Point is not configured, the task will correct the configuration.</p>
+</div>
+<div class="paragraph">
+<p>Step 5: Review the <code>Playbook-Check-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-playbook-check.png" target="blank"><img src="_images/workflow-playbook-check.png" alt="Playbook Checkmode" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. Note, this job-template and playbook is set to <code>check-mode</code> so the <code>fix</code> is not applied to cisco-rtr1 at the moment.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed5.png" target="blank"><img src="_images/workflow-changed5.png" alt="Change 1" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the when the playbook is run again in <code>run mode</code> it would <code>Change</code> the configuration by applying the following CLI configuration.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed6.png" target="blank"><img src="_images/workflow-changed6.png" alt="Change 2" width="160%"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+Note: We know the playbook was run in <code>check-mode</code> from the previous scenarios, so this time we skip the Splunk dashboard step.
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Step 7: Human Review
+The <strong>Network-AIOps-Workflow</strong> Should be in a paused state until we approve, deny or cancel. If your workflow has succeeded thus far, it&#8217;s okay to approve the workflow, at this time.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-approve.png" target="blank"><img src="_images/workflow-approve.png" alt="Approve 3" width="160%"></a>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/approve.png" target="blank"><img src="_images/approve.png" alt="Approval" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 9: Review the <code>Playbook-Run-Mode</code> job-template in the workflow.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-run.png" target="blank"><img src="_images/workflow-run.png" alt="Playbook run" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Click into the changed output to review. This time the job-template and playbook was set to <code>run-mode</code> so the <code>fix</code> is applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed5.png" target="blank"><img src="_images/workflow-changed5.png" alt="Change 3" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>The following data output displays the CLI configuration that was applied to cisco-rtr1.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/workflow-changed6.png" target="blank"><img src="_images/workflow-changed6.png" alt="Change 2" width="160%"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Step 10: Return to cisco-rtr1 to verify the OSPF adjacency is full.
+This time we will check the status from the router to ensure the OSPF hello interval == 10</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/bastion.png" target="blank"><img src="_images/bastion.png" alt="bastion" width="160%"></a>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SSH password=<code>ansible123!</code></p>
+</li>
+<li>
+<p>SSH into cisco-rtr1 and add the following commands</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">ssh admin@cisco-rtr1
+sh ip ospf neighbor</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Neighbor ID     Pri   State           Dead Time   Address         Interface
+192.168.2.2       0   FULL/  -        00:00:33    10.100.100.2    Tunnel0</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-BASH hljs" data-lang="BASH">sh ip ospf int tu0 | s Hello</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre> Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+    oob-resync timeout 40
+    Hello due in 00:00:05</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This Lab successfully implemented a closed-loop, AI-driven network automation workflow. We began by integrating Cisco OSPF monitoring with Splunk alerting. Subsequently, an Event-Driven Ansible (EDA) rulebook was configured to act on these alerts, establishing an operational feedback loop. This final module used that loop to trigger an AI workflow, which dynamically generates a remediation playbook. This new capability allowed us to successfully stage, test, and automate troubleshooting for three distinct OSPF failure scenarios.</p>
+</div>
+<div class="paragraph">
+<p>By using Red Hat AI, our network expert could focus on codifying their troubleshooting knowledge in plain language, rather than getting bogged down in low-level syntax like playbook conditionals, operators, or regular expressions. This same process could easily be used to iterate additional trouble shooting scenarios into the same playbook or refactored as roles.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_congratulations_youve_completed_part_2"><a class="anchor" href="#_congratulations_youve_completed_part_2"></a>Congratulations! You&#8217;ve Completed Part 2!</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have successfully completed the Network Automation portion of this lab! You&#8217;ve now seen how AI-driven automation can be applied to both server infrastructure (Part 1) and network infrastructure (Part 2).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_complete"><a class="anchor" href="#_complete"></a>Complete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Click the link below to proceed to the <strong>Summary and Call to Actions</strong> for next steps and resources.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="module-04.html" class="query-params-link">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a></span>
+  <span class="next"><a href="module-08.html" class="query-params-link">Autonomous AIOps: Self-Healing RHEL with Splunk</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>  </div>
+</main>
+</div>
+<footer class="footer">
+  <a href="https://demo.redhat.com" target="_blank" class="poweredBy"><p>Powered by</p><div class="labInfo_poweredBy" style="display: block; width: 260px;"><svg class="labInfo_poweredByLogo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1508.5 178.739"><g fill="#111"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#111"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#111" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">Demo Platform</tspan></text></svg></div></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

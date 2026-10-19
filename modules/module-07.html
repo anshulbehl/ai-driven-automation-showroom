@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Section 4 - Red Hat Lightspeed: CVE and Advisor Remediation :: Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</title>
+    <link rel="canonical" href="https://github.com/rhpds/showroom_template_nookbag/modules/module-07.html">
+    <link rel="prev" href="module-06.html">
+    <link rel="next" href="module-09.html">
+    <meta name="generator" content="Antora 3.2.1">
+    <link rel="stylesheet" href="../_/css/site.css">
+<link rel="icon" href="../_/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://demo.redhat.com" target="_blank" style="margin-left: 5%;">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1008.5 178.739" style="width: 200px;"><g fill="#fff"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#fff"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#e00" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">One</tspan></text></svg>
+      </a>
+      <a class="navbar-item site-title" target="__blank" style="color: #fff !important;" href="https://github.com/rhpds/showroom_template_nookbag">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item navbar-item-right-dropdown has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Links</a>
+          <div class="navbar-dropdown navbar-dropdown-right">
+            <a class="navbar-item navbar-item-right-content" href="https://redhat.com" target="_blank">Red Hat</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="modules" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html" class=" query-params-link">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 1: IBM Instana Observability and Intelligent Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part1.html">1.1 Instana Observability and Infrastructure Monitoring</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-00-instana-part2.html">1.2 Smart Alerts and Dual-Path Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 2: AIOps with Apache Remediation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-01.html">2.1 Log Enrichment and Prompt Generation Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-02.html">2.2 Remediation Workflow</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 3: AIOps with Windows Automation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-06.html">3. Windows Events and AI-Driven Ticketing</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 4: Red Hat Lightspeed and Agentic IDE Workflow</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Section 5: AI-Driven Incident Response</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="module-09.html">5. AI Agents and AAP via MCP</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-10.html">Summary and Call to Actions</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Dev Mode</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-03.html">Section 2.1 - Splunk for Network Observability</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-04.html">Section 2.2 - Event Driven Ansible: Splunk Webhook Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-05.html">Section 2.3 - Network Workflow</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="module-08.html">Autonomous AIOps: Self-Healing RHEL with Splunk</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="attrs-page.html">Attributes Page</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</span>
+      <ul class="versions">
+        <li class="version is-current">
+          <a href="index.html">master</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Hands-On AIOps: Building Self-Healing, Observability-Driven Automation with Ansible</a></li>
+    <li>Section 4: Red Hat Lightspeed and Agentic IDE Workflow</li>
+    <li><a href="module-07.html">4. Red Hat Lightspeed: CVE and Advisor Remediation</a></li>
+  </ul>
+</nav>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Section 4 - Red Hat Lightspeed: CVE and Advisor Remediation</h1>
+<div class="sect1">
+<h2 id="_agenda"><a class="anchor" href="#_agenda"></a>Agenda</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Section</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_logging_in_to_red_hat_lightspeed">Logging in to Red Hat Lightspeed</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sign in to console.redhat.com and explore the dashboard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Register RHEL Nodes to Red Hat Lightspeed">[Register RHEL Nodes to Red Hat Lightspeed]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use an AAP Job Template to register and tag your RHEL nodes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_exercise_1_executive_pdf_report">Exercise 1: Executive PDF Report</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generate a vulnerability report from the Lightspeed dashboard</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_exercise_2_advisor_remediation_manual">Exercise 2: Advisor Remediation (Manual)</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Download an Advisor playbook, review it, and run it through AAP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_exercise_3_cve_remediation_agentic_via_mcp">Exercise 3: CVE Remediation (Agentic via MCP)</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use Claude Code + MCP to find and fix a CVE end-to-end</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_exercise_4_httpd_configuration_fix_automation_coding_assistant">Exercise 4: HTTPD Configuration Fix (Automation coding assistant)</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generate an HTTPD fix with Google Gemini in the IDE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_exercise_5_rhel_system_roles_pre_built">Exercise 5: RHEL System Roles (Pre-Built)</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apply a pre-built System Role for NTP configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_objective"><a class="anchor" href="#_objective"></a>Objective</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Estimated time: 30-40 minutes</strong></p>
+</div>
+<div class="paragraph">
+<p>In this section, you will use <strong>Red Hat Lightspeed</strong> (on <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a>) to identify vulnerabilities and misconfigurations across your RHEL fleet, generate remediation playbooks, review them in a developer IDE, push them to Git, and create Job Templates in Ansible Automation Platform. This is the foundation for both human-guided and fully autonomous remediation workflows in the subsequent sections.</p>
+</div>
+<div class="paragraph">
+<p>After completing this section, you will be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>🔍 <strong>Identify and report</strong> — Use Red Hat Lightspeed to discover CVEs and Advisor recommendations across your RHEL fleet, and generate executive vulnerability reports</p>
+</li>
+<li>
+<p>🤖 <strong>Generate and remediate</strong> — Create remediation playbooks through multiple methods: manually via the Lightspeed web UI, agentically via Claude Code + MCP, and with AI assistance from Automation coding assistant</p>
+</li>
+<li>
+<p>🚀 <strong>Promote to production</strong> — Review playbooks in code-server, push them to Git, and create AAP Job Templates ready for execution</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Terminology Update — Red Hat Lightspeed</strong></p>
+</div>
+<div class="paragraph">
+<p>Red Hat has consolidated its AI-powered services under the <strong>Lightspeed</strong> brand. Here is a quick reference for the new naming:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Previous Name</th>
+<th class="tableblock halign-left valign-top">New Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Red Hat Insights (console.redhat.com)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Red Hat Lightspeed</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ansible Lightspeed Code Assistant (with IBM watsonx)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Automation coding assistant</strong> (supports Gemini, Red Hat AI, or IBM watsonx)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ansible Lightspeed Intelligent Assistant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Automation intelligent assistant</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>If you have used Insights or Ansible Lightspeed before, the functionality is the same; only the branding has changed. In Sections 1-3 of this workshop, you may see references to "Ansible Lightspeed" in job template and workflow names within AAP. This is the same technology now called <strong>Automation coding assistant</strong>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_background_red_hat_lightspeed"><a class="anchor" href="#_background_red_hat_lightspeed"></a>Background: Red Hat Lightspeed</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://console.redhat.com" target="_blank" rel="noopener">Red Hat Lightspeed</a> (formerly Red Hat Insights) is a managed service included with every RHEL subscription. It continuously analyzes your connected RHEL systems and provides:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Vulnerability reports</strong> — identifies CVEs affecting your systems, with severity ratings and remediation guidance</p>
+</li>
+<li>
+<p><strong>Advisor recommendations</strong> — proactive suggestions from Red Hat Support to improve stability, performance, and security (e.g., "SELinux is in permissive mode" or "system would not survive a reboot due to a bad policy")</p>
+</li>
+<li>
+<p><strong>Remediation playbooks</strong> — auto-generated Ansible Playbooks that fix identified issues, ready to download and execute</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Advisor vs CVE</strong>: Think of CVEs as <strong>reactive</strong> — patching known vulnerabilities. Advisor recommendations are <strong>proactive</strong> — fixing misconfigurations and applying best practices before they become incidents. Both are critical for a healthy RHEL fleet.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_lab_environment"><a class="anchor" href="#_lab_environment"></a>Lab Environment</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_rhel_instances"><a class="anchor" href="#_rhel_instances"></a>RHEL Instances</h3>
+<div class="paragraph">
+<p>This part of the lab uses <strong>three RHEL instances</strong>, each dedicated to a specific use case:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 42.8571%;">
+<col style="width: 28.5715%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Host</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+<th class="tableblock halign-left valign-top">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{rhel_node1}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apache web server (from <a href="module-01.html" class="xref page">Section 1</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTPD configuration remediation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{rhel_node2}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CVE remediation target</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Patch a known CVE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{rhel_node3}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Advisor recommendation target</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fix an Advisor-flagged misconfiguration</p></td>
+</tr>
+</tbody>
+</table>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Why three RHEL instances?</strong> Each use case runs on its own node so that if one breaks during the exercise, the lab continues on the others. This also keeps scenarios cleanly separated for simplicity.
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_developer_ide_code_server"><a class="anchor" href="#_developer_ide_code_server"></a>Developer IDE: code-server</h3>
+<div class="paragraph">
+<p>Your lab environment includes <strong>code-server</strong>, which is <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> running in your browser. This gives you a full VS Code experience — editor, terminal, extensions — without installing anything locally.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">code-server URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="{ide_url}" target="_blank" rel="noopener">code-server (VS Code)</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{ide_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_ai_agent_claude_code"><a class="anchor" href="#_ai_agent_claude_code"></a>AI Agent: Claude Code</h3>
+<div class="paragraph">
+<p>Your lab environment has <strong>Claude Code</strong> pre-installed — Anthropic&#8217;s CLI-based AI agent that runs in the terminal inside code-server. It supports MCP and connects to both the Ansible MCP server and the Red Hat Lightspeed MCP server.</p>
+</div>
+<div class="paragraph">
+<p>To launch Claude Code:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open a <strong>terminal</strong> inside code-server. Navigate to <strong>Terminal → New Terminal</strong> from the top menu bar.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-new-terminal.png" target="blank"><img src="_images/codeserver-new-terminal.png" alt="Open a new terminal in code-server"></a>
+</div>
+</div>
+</li>
+<li>
+<p>Type <code>claude</code> to start Claude Code.</p>
+</li>
+<li>
+<p>When prompted with the workspace trust dialog, select <strong>1. Yes, I trust this folder</strong> and press Enter.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-trust-folder.png" target="blank"><img src="_images/claude-code-trust-folder.png" alt="Claude Code trust folder prompt"></a>
+</div>
+</div>
+</li>
+<li>
+<p>The Claude Code terminal interface will appear.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-welcome.png" target="blank"><img src="_images/claude-code-welcome.png" alt="Claude Code welcome screen"></a>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>MCP is pre-configured.</strong> Claude Code is already connected to the Ansible MCP server and the Red Hat Lightspeed MCP server in your lab environment. You do not need to configure anything.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Model availability.</strong> This lab environment provides access to <strong>Claude Sonnet 4.6</strong> (<code>claude-sonnet-4-6</code>). If Claude Code fails to respond or shows a model error, switch to the correct model:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>CLI</strong>: Type <code>/model</code> and select <code>claude-sonnet-4-6</code></p>
+</li>
+<li>
+<p><strong>VS Code extension</strong>: Click the model name in the status bar or use <code>Ctrl+Shift+P</code> &#8594; "Claude Code: Set Model"</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-mcp-servers.png" target="blank"><img src="_images/claude-code-mcp-servers.png" alt="Claude Code MCP servers"></a>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>OpenCode</strong> is also installed in this environment but has not been tested with this lab. If you want to experiment with it, you can launch it by typing <code>opencode</code> in the terminal. It connects to the same MCP servers, but <strong>Claude Code is the recommended and tested agent</strong> for all exercises.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_red_hat_lightspeed_console_redhat_com"><a class="anchor" href="#_red_hat_lightspeed_console_redhat_com"></a>Red Hat Lightspeed (console.redhat.com)</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Red Hat Lightspeed URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://console.redhat.com" target="_blank" rel="noopener">Red Hat Lightspeed (console.redhat.com)</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{insights_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{insights_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logging_in_to_red_hat_lightspeed"><a class="anchor" href="#_logging_in_to_red_hat_lightspeed"></a>Logging in to Red Hat Lightspeed</h2>
+<div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Manual login required.</strong> You must log in to <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a> with the credentials above. This is a shared Red Hat account that has your lab RHEL systems already registered. Open the link in a new browser tab and sign in before proceeding.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a> in a new browser tab.</p>
+</li>
+<li>
+<p>Log in using the <strong>Username</strong> and <strong>Password</strong> shown in the table above.</p>
+</li>
+<li>
+<p>Click the <strong>Red Hat Hybrid Cloud Console</strong> dropdown (top-left) and select <strong>Red Hat Enterprise Linux</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-rhel-platform.png" target="blank"><img src="_images/console-rhel-platform.png" alt="Select Red Hat Enterprise Linux"></a>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Keep this browser tab open</strong> — you will come back to it shortly. Right now the dashboards are empty because your RHEL nodes have not been registered yet. In the next step, we will use Ansible Automation Platform to register them so they appear here.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_accessing_ansible_automation_platform"><a class="anchor" href="#_accessing_ansible_automation_platform"></a>Accessing Ansible Automation Platform</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AAP URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AAP is preloaded in the lab interface. Click to open in a full tab: <a href="{controller_url}" target="_blank" rel="noopener">AAP Web UI</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{controller_username}</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>{controller_password}</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open AAP using the above details or click the <strong>AAP</strong> tab in your lab interface</p>
+</li>
+<li>
+<p>Login using the credentials provided</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_rhel_node_registration_already_complete"><a class="anchor" href="#_rhel_node_registration_already_complete"></a>RHEL Node Registration (Already Complete)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your RHEL nodes have already been registered with Red Hat Lightspeed (formerly Red Hat Insights) during lab provisioning. The <strong>Register with Red Hat Lightspeed</strong> job template ran automatically when your environment was set up, connecting all three nodes (<code>node1</code>, <code>node2</code>, <code>node3</code>) to <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>How was this done?</strong> The lab provisioning process ran the <strong>Register with Red Hat Lightspeed</strong> job template against all RHEL nodes. This template uses <code>rhc connect</code> to register each node with the Red Hat CDN and Insights service, and tags them with your lab&#8217;s unique sandbox identifier for easy filtering. In a production environment, you would use the same approach to register hosts at scale using Ansible Automation Platform.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_finding_your_nodes_in_red_hat_lightspeed"><a class="anchor" href="#_finding_your_nodes_in_red_hat_lightspeed"></a>Finding Your Nodes in Red Hat Lightspeed</h3>
+<div class="paragraph">
+<p>To verify registration and locate your nodes:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Return to your <a href="https://console.redhat.com" target="_blank" rel="noopener">console.redhat.com</a> browser tab.</p>
+</li>
+<li>
+<p>Navigate to <strong>Inventory</strong> &#8594; <strong>Systems</strong>.</p>
+</li>
+<li>
+<p>Click <strong>Filter by tags</strong>, select <strong>Tags</strong>, and search for <code>group=my-guid</code>. This filters the system list to show only the three RHEL nodes belonging to your lab environment.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Your sandbox ID is <code>my-guid</code>. You can find it in any of your lab URLs (e.g., <code>controller-my-guid.apps&#8230;&#8203;</code>).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-inventory-tags-filter.png" target="blank"><img src="_images/console-inventory-tags-filter.png" alt="Filter systems by tag in console.redhat.com"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also verify registration from the AAP Jobs history. Look for the <strong>Register with Red Hat Lightspeed</strong> job that ran during provisioning.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generating_remediation_playbooks"><a class="anchor" href="#_generating_remediation_playbooks"></a>Generating Remediation Playbooks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You will work through <strong>five exercises</strong> in this section. The first generates a vulnerability report, and the remaining four each produce a remediation playbook:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5714%;">
+<col style="width: 28.5715%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">#</th>
+<th class="tableblock halign-left valign-top">Exercise</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Executive PDF Report</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Generate a PDF report summarizing CVEs affecting your environment</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Manual</strong> — Lightspeed web UI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Advisor Remediation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixes an Advisor-flagged misconfiguration on <code>{rhel_node3}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Manual</strong> — Lightspeed web UI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CVE Remediation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Patches a specific CVE identified by Lightspeed on <code>{rhel_node2}</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Agentic</strong> — Claude Code + MCP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTPD Configuration Fix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remediates the Apache configuration issue using Automation coding assistant</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>AI-generated</strong> — Automation coding assistant (Gemini)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System Roles Playbook</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Uses RHEL System Roles for NTP configuration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Pre-built</strong> — provided in the lab</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exercise_1_executive_pdf_report"><a class="anchor" href="#_exercise_1_executive_pdf_report"></a>Exercise 1: Executive PDF Report</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat Lightspeed can generate PDF reports summarizing CVEs affecting your environment. You will generate an Executive Report to understand the vulnerability landscape before creating remediation playbooks.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the console.redhat.com browser tab you already have open, expand <strong>Security</strong> → <strong>Vulnerability</strong> → <strong>Reports</strong> in the left navigation.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-vulnerability-reports.png" target="blank"><img src="_images/console-vulnerability-reports.png" alt="Vulnerability Reports navigation"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Click <strong>Executive Report</strong> to generate the report.</p>
+</li>
+<li>
+<p>Download and review the PDF — it summarizes the CVEs affecting your connected RHEL systems, organized by severity.</p>
+</li>
+</ol>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Why start with a report?</strong> The Executive Report gives you a high-level view of your environment&#8217;s vulnerability posture. This context helps you prioritize which CVEs and Advisor recommendations to remediate first in the exercises that follow.
+</blockquote>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Our goal:</strong> Take a moment to look at the Advisor recommendations and CVEs listed in your Lightspeed dashboard. Note how many issues are flagged across your three RHEL nodes. In the next two exercises, we are going to fix these issues — first an Advisor recommendation (Exercise 2), then a CVE (Exercise 3). By the end, you should see the remediated issues disappear from the dashboard. The nodes we <em>didn&#8217;t</em> fix will still show the issue, proving the remediation actually worked.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exercise_2_advisor_remediation_manual"><a class="anchor" href="#_exercise_2_advisor_remediation_manual"></a>Exercise 2: Advisor Remediation (Manual)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Advisor section of Red Hat Lightspeed provides proactive recommendations — misconfigurations, compliance issues, and best practices flagged by Red Hat Support.</p>
+</div>
+<div class="sect2">
+<h3 id="_step_1_navigate_to_advisor"><a class="anchor" href="#_step_1_navigate_to_advisor"></a>Step 1: Navigate to Advisor</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the console.redhat.com browser tab you already have open, navigate to <strong>Operations</strong> → <strong>Advisor</strong> → <strong>Recommendations</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-nav.png" target="blank"><img src="_images/console-advisor-nav.png" alt="Advisor Recommendations navigation"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Find a recommendation affecting <code>{rhel_node3}</code>. We recommend selecting <strong>Decreased security: OpenSSH LoginGraceTime settings</strong>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-openssh-recommendation.png" target="blank"><img src="_images/console-advisor-openssh-recommendation.png" alt="Advisor OpenSSH LoginGraceTime recommendation"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_generate_the_remediation_playbook"><a class="anchor" href="#_step_2_generate_the_remediation_playbook"></a>Step 2: Generate the remediation playbook</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select <code>{rhel_node3}</code> from the <strong>Affected Systems</strong> list by clicking the checkbox next to it.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-select-system.png" target="blank"><img src="_images/console-advisor-select-system.png" alt="Select node3 from affected systems"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Click the blue <strong>Plan remediation</strong> button.</p>
+</li>
+<li>
+<p>In the <strong>Plan a remediation</strong> dialog, enter a plan name (e.g., <code>etx-advisor-plan</code>) and click the blue <strong>Create plan</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-plan-remediation.png" target="blank"><img src="_images/console-advisor-plan-remediation.png" alt="Plan a remediation dialog"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>The screen will switch to the created remediation plan. Click the <strong>Download</strong> button to download the playbook to your workstation.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-remediation-plan-created.png" target="blank"><img src="_images/console-advisor-remediation-plan-created.png" alt="Remediation plan created and ready to download"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Once downloaded, you can view the Ansible Playbook on your workstation. Below is a snippet of the generated playbook:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-advisor-playbook-snippet.png" target="blank"><img src="_images/console-advisor-playbook-snippet.png" alt="Advisor remediation playbook snippet"></a>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This is only a snippet — the full playbook may contain additional tasks and configuration depending on the recommendation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_upload_the_playbook_to_code_server"><a class="anchor" href="#_step_3_upload_the_playbook_to_code_server"></a>Step 3: Upload the playbook to code-server</h3>
+<div class="paragraph">
+<p>The playbook you downloaded in the previous step is on your <strong>local laptop/workstation</strong>. You need to upload it to the <strong>code-server</strong> instance running in your lab environment.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In your code-server browser tab, right-click the file explorer panel and select <strong>Upload Files&#8230;&#8203;</strong> (or use <strong>File → Upload Files&#8230;&#8203;</strong>).</p>
+</li>
+<li>
+<p>Navigate to your local Downloads folder and select the playbook you just downloaded.</p>
+</li>
+<li>
+<p>Save it as <code>remediation.yml</code> in the <code>lightspeed_playbooks</code> directory (<code>/home/lab-user/lightspeed_playbooks/</code>). This is the directory synced with Git.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_fix_the_hostname_to_match_your_aap_inventory"><a class="anchor" href="#_step_4_fix_the_hostname_to_match_your_aap_inventory"></a>Step 4: Fix the hostname to match your AAP inventory</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open <code>lightspeed_playbooks/remediation.yml</code> and find the <code>hosts:</code> field — Lightspeed generates the full DNS name (e.g. <code>node3.sandbox-my-guid-ocp4-cluster.svc.cluster.local</code>).</p>
+</li>
+<li>
+<p>Change it to just <code>node3</code> to match the host name in your AAP inventory.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_5_push_the_playbook_to_gitea"><a class="anchor" href="#_step_5_push_the_playbook_to_gitea"></a>Step 5: Push the playbook to Gitea</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">push remediation.yml to git</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude will commit and push to your <code>lightspeed_playbooks</code> repo automatically.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_6_sync_the_aap_project"><a class="anchor" href="#_step_6_sync_the_aap_project"></a>Step 6: Sync the AAP project</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">sync the AAP project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This pulls the latest playbook from Gitea into AAP&#8217;s <strong>Lightspeed-Playbooks</strong> project.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_7_create_the_job_template"><a class="anchor" href="#_step_7_create_the_job_template"></a>Step 7: Create the Job Template</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Create a Job Template called "Remediation - SSH LoginGraceTime" that uses
+the remediation.yml playbook from the Lightspeed-Playbooks project.
+It should target node3.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will use the Ansible MCP server to create the Job Template in AAP.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_8_run_the_job_template"><a class="anchor" href="#_step_8_run_the_job_template"></a>Step 8: Run the Job Template</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In AAP, navigate to <strong>Templates</strong> → <strong>Remediation - SSH LoginGraceTime</strong>.</p>
+</li>
+<li>
+<p>Click <strong>Launch</strong> and verify the job completes successfully.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-advisor-remediation-success.png" target="blank"><img src="_images/aap-advisor-remediation-success.png" alt="Advisor remediation job completed successfully"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verify_the_remediation"><a class="anchor" href="#_verify_the_remediation"></a>Verify the remediation</h3>
+<div class="paragraph">
+<p>Go back to <strong>Operations</strong> → <strong>Advisor</strong> → <strong>Recommendations</strong> in console.redhat.com and revisit the <strong>Decreased security: OpenSSH LoginGraceTime settings</strong> recommendation. You should see that <code>{rhel_node3}</code> is no longer listed as an affected system — the remediation worked. The other nodes that were not remediated will still show the issue.</p>
+</div>
+<div class="paragraph">
+<p>You can also verify using Claude Code by asking the Lightspeed MCP server directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Check if the OpenSSH LoginGraceTime Advisor recommendation still
+affects my systems with the {guid} tag.</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Advisor recommendations</strong> are based on Red Hat&#8217;s deep expertise supporting thousands of enterprise RHEL deployments. These are not theoretical — they flag real misconfigurations that Red Hat Support has seen cause outages in production.
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exercise_3_cve_remediation_agentic_via_mcp"><a class="anchor" href="#_exercise_3_cve_remediation_agentic_via_mcp"></a>Exercise 3: CVE Remediation (Agentic via MCP)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This exercise demonstrates the <strong>fully agentic approach</strong>: you will use Claude Code to discover CVEs and download a remediation playbook entirely through the MCP interface, without ever opening the Lightspeed web UI manually.</p>
+</div>
+<div class="sect2">
+<h3 id="_step_1_launch_claude_code"><a class="anchor" href="#_step_1_launch_claude_code"></a>Step 1: Launch Claude Code</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open a terminal in code-server. Navigate to <strong>Terminal → New Terminal</strong> from the top menu bar.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-new-terminal.png" target="blank"><img src="_images/codeserver-new-terminal.png" alt="Open a new terminal in code-server"></a>
+</div>
+</div>
+</li>
+<li>
+<p>Type <code>claude</code> to start Claude Code.</p>
+</li>
+<li>
+<p>When prompted with the workspace trust dialog, select <strong>1. Yes, I trust this folder</strong> and press Enter.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-trust-folder.png" target="blank"><img src="_images/claude-code-trust-folder.png" alt="Claude Code trust folder prompt"></a>
+</div>
+</div>
+</li>
+<li>
+<p>The Claude Code terminal interface will appear.</p>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-welcome.png" target="blank"><img src="_images/claude-code-welcome.png" alt="Claude Code welcome screen"></a>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_ask_claude_code_about_cves"><a class="anchor" href="#_step_2_ask_claude_code_about_cves"></a>Step 2: Ask Claude Code about CVEs</h3>
+<div class="paragraph">
+<p>In the Claude Code chat, type a prompt like the one below. Your sandbox ID <code>my-guid</code> is used as the tag to filter your systems:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">What CVEs are affecting my RHEL systems? Show me the critical and important
+ones that have remediation available. Only show hosts with the my-guid tag.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will use the <strong>Red Hat Lightspeed MCP server</strong> to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Query your connected RHEL systems filtered by your unique tag</p>
+</li>
+<li>
+<p>List CVEs with severity ratings</p>
+</li>
+<li>
+<p>Identify which CVEs have remediation playbooks available</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Claude Code will prompt you for permission each time it wants to use an MCP tool. Select <strong>1. Yes</strong> or <strong>2. Yes, and don&#8217;t ask again</strong> to allow it to proceed. You may be prompted multiple times depending on how Claude Code chooses to solve the request — it may use multiple different tools.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-mcp-permission.png" target="blank"><img src="_images/claude-code-mcp-permission.png" alt="Claude Code MCP tool permission prompt"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>At the end, you will get output similar to the following:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-cve-results.png" target="blank"><img src="_images/claude-code-cve-results.png" alt="Claude Code CVE query results"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_choose_a_cve_to_remediate"><a class="anchor" href="#_step_3_choose_a_cve_to_remediate"></a>Step 3: Choose a CVE to remediate</h3>
+<div class="paragraph">
+<p>From the results, select a CVE to fix. We recommend <strong>CVE-2025-31277</strong> — <em>A flaw was found in WebKitGTK. Processing malicious web content can cause memory corruption due to improper memory handling.</em></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You will reference this specific CVE in the following steps. If your environment shows a different critical CVE with an available advisory, you can choose that one instead — just adjust the prompts accordingly.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_download_the_remediation_playbook"><a class="anchor" href="#_step_4_download_the_remediation_playbook"></a>Step 4: Download the remediation playbook</h3>
+<div class="paragraph">
+<p>Ask Claude Code to download the playbook for the specific CVE:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Download the remediation playbook for CVE-2025-31277. Save it as
+cve-remediation.yml in the lightspeed_playbooks directory.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will use the Lightspeed MCP server to fetch the remediation playbook and save it to the <code>lightspeed_playbooks</code> directory.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_5_review_the_playbook_and_fix_the_hostname"><a class="anchor" href="#_step_5_review_the_playbook_and_fix_the_hostname"></a>Step 5: Review the playbook and fix the hostname</h3>
+<div class="paragraph">
+<p>The downloaded playbook will automatically be available in the code-server file explorer. Open it and review the YAML content to confirm it addresses CVE-2025-31277.</p>
+</div>
+<div class="paragraph">
+<p>Just like the Advisor exercise, the Lightspeed playbook will use the full DNS name in the <code>hosts:</code> field (e.g. <code>node2.sandbox-my-guid-ocp4-cluster.svc.cluster.local</code>). Change it to just <code>node2</code> so it matches your AAP inventory and only runs on that one node.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_6_push_to_git"><a class="anchor" href="#_step_6_push_to_git"></a>Step 6: Push to Git</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">push cve-remediation.yml to git</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude will commit and push to your <code>lightspeed_playbooks</code> repo automatically.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_7_sync_the_aap_project_and_create_a_job_template"><a class="anchor" href="#_step_7_sync_the_aap_project_and_create_a_job_template"></a>Step 7: Sync the AAP project and create a Job Template</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Sync the AAP project, then create a Job Template called
+"CVE Remediation - CVE-2025-31277" that uses the cve-remediation.yml
+playbook from the Lightspeed-Playbooks project. It should target node2.</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-cve-job-template.png" target="blank"><img src="_images/aap-cve-job-template.png" alt="CVE Remediation Job Template in AAP"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_8_run_the_job_template_2"><a class="anchor" href="#_step_8_run_the_job_template_2"></a>Step 8: Run the Job Template</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Go ahead and launch it</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will launch the job and monitor it until completion.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-cve-job-success.png" target="blank"><img src="_images/claude-code-cve-job-success.png" alt="Claude Code CVE remediation job completed successfully"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verify_the_remediation_2"><a class="anchor" href="#_verify_the_remediation_2"></a>Verify the remediation</h3>
+<div class="paragraph">
+<p>Go back to <strong>Security</strong> → <strong>Vulnerability</strong> → <strong>CVEs</strong> in console.redhat.com and check the CVE you just remediated. You should see that <code>{rhel_node2}</code> is no longer listed as affected. The nodes that were not targeted will still show the vulnerability.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/console-cve-remediation-verified.png" target="blank"><img src="_images/console-cve-remediation-verified.png" alt="CVE remediation verified in console"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also ask Claude Code to verify without leaving the terminal:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Check if CVE-2025-31277 still affects my node2</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-cve-verified.png" target="blank"><img src="_images/claude-code-cve-verified.png" alt="Claude Code confirms CVE remediation"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>This was entirely agentic.</strong> You never opened a web browser, navigated dashboards, or clicked download buttons. Claude Code used MCP to query Lightspeed, found the CVE, fetched the playbook, pushed it to Git, created a Job Template, and ran it — all through a conversation in the terminal.
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exercise_4_httpd_configuration_fix_automation_coding_assistant"><a class="anchor" href="#_exercise_4_httpd_configuration_fix_automation_coding_assistant"></a>Exercise 4: HTTPD Configuration Fix (Automation coding assistant)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For this playbook, you will use <strong>Automation coding assistant</strong> — Red Hat&#8217;s AI-powered code generation tool integrated into your IDE — to generate a playbook that fixes the Apache configuration issue from Section 1.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>IDE-first workflow</strong>: In Labs 1-3, playbooks were generated programmatically via API calls and pushed to Git without human review. Here, you are working in the IDE as a developer would — using AI assistance to write the playbook, reviewing the output, and making any adjustments before committing. This is the modern developer workflow for infrastructure as code.
+</blockquote>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>What is Automation coding assistant?</strong></p>
+</div>
+<div class="paragraph">
+<p>Automation coding assistant (previously called Ansible Lightspeed) is an AI-powered tool that generates Ansible Playbook content from natural language descriptions. In Sections 1-3 of this workshop, it was called via API to auto-generate playbooks. In this section, you use it directly in your IDE as a developer tool.</p>
+</div>
+<div class="paragraph">
+<p><strong>Flexible AI backends</strong>: Automation coding assistant is no longer tied to a single AI provider. Your lab environment is configured with <strong>Google Gemini</strong> as the backend, but it also supports <strong>Red Hat AI</strong> and <strong>IBM watsonx</strong>. This gives organizations the flexibility to choose the AI provider that best fits their requirements.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_step_1_configure_automation_coding_assistant_with_google_gemini"><a class="anchor" href="#_step_1_configure_automation_coding_assistant_with_google_gemini"></a>Step 1: Configure Automation coding assistant with Google Gemini</h3>
+<div class="paragraph">
+<p>Before generating a playbook, you need to configure the Automation coding assistant extension with the Google Gemini LLM provider.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In code-server, click the <strong>Ansible "A" icon</strong> in the left sidebar to open the Ansible Development Tools panel.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-ansible-plugin.png" target="blank"><img src="_images/codeserver-ansible-plugin.png" alt="Ansible Development Tools plugin"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Under <strong>GENERATIVE AI</strong>, click <strong>LLM Provider : Google Gemini</strong>.</p>
+</li>
+<li>
+<p>Fill in the following values:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 40%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API Endpoint</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="http://localhost:4011" class="bare">http://localhost:4011</a></code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">API Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dummy</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Model Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gemini-2.5-pro</code></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-gemini-configured.png" target="blank"><img src="_images/codeserver-gemini-configured.png" alt="Google Gemini configured for Automation coding assistant"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Click <strong>Save</strong>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_generate_the_playbook_with_the_wizard"><a class="anchor" href="#_step_2_generate_the_playbook_with_the_wizard"></a>Step 2: Generate the playbook with the wizard</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click the <strong>Ansible icon</strong> in the left sidebar of code-server to open the Ansible Development Tools panel.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-ansible-icon.png" target="blank"><img src="_images/codeserver-ansible-icon.png" alt="Ansible plugin icon"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Under <strong>GENERATIVE AI</strong>, click <strong>Generate Playbook</strong>.</p>
+</li>
+<li>
+<p>In the prompt field, enter:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Fix Apache httpd configuration by removing InvalidDirectiveHere and restarting the service, target node1, this needs to respond with one yaml file that we can run directly</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Click the blue <strong>Analyze</strong> button.</p>
+</li>
+<li>
+<p>Wait for Automation coding assistant to process the request.</p>
+</li>
+<li>
+<p>Click the blue <strong>Continue</strong> button.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The wizard will generate an Ansible Playbook:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/codeserver-generate-playbook-result.png" target="blank"><img src="_images/codeserver-generate-playbook-result.png" alt="Generated playbook from Automation coding assistant"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p>Click <strong>Open editor</strong> to load the playbook into the code-server editor.</p>
+</li>
+<li>
+<p>Click <strong>File</strong> → <strong>Save</strong> and save the playbook as <code>httpd-fix.yml</code> in the <code>lightspeed_playbooks</code> directory so it can be pushed to Git.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_push_create_job_template_and_run"><a class="anchor" href="#_step_3_push_create_job_template_and_run"></a>Step 3: Push, create Job Template, and run</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ask Claude Code to handle the full workflow:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Push httpd-fix.yml to git, sync the AAP project, create a Job Template
+called "HTTPD Fix" using httpd-fix.yml from the Lightspeed-Playbooks
+project targeting node1, and then launch it.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will push the playbook to Gitea, sync the AAP project, create the Job Template, and run it — all in one go.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-httpd-fix-success.png" target="blank"><img src="_images/claude-code-httpd-fix-success.png" alt="Claude Code HTTPD fix completed successfully"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_optional_verify_in_aap"><a class="anchor" href="#_step_4_optional_verify_in_aap"></a>Step 4: (Optional) Verify in AAP</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Switch to the <strong>AAP tab</strong> in your lab interface.</p>
+</li>
+<li>
+<p>Navigate to <strong>Jobs</strong> and look for the most recent job run — you should see the <strong>HTTPD Fix</strong> job completed successfully.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-httpd-fix-job-success.png" target="blank"><img src="_images/aap-httpd-fix-job-success.png" alt="HTTPD Fix job success in AAP"></a>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_5_optional_break_and_fix_apache_again"><a class="anchor" href="#_step_5_optional_break_and_fix_apache_again"></a>Step 5: (Optional) Break and fix Apache again</h3>
+<div class="paragraph">
+<p>Want to try the full break-and-fix cycle yourself? You can intentionally break Apache on node1 and then use the playbook you just generated to fix it again — similar to the self-healing workflow in <a href="module-01.html" class="xref page">Section 1</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In the AAP Web UI, navigate to <strong>Rulebook Activations</strong>.</p>
+</li>
+<li>
+<p>Find the <strong>Web App</strong> rulebook activation and disable it (toggle it off so EDA does not auto-remediate).</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-rulebook-activation-running.png" target="blank"><img src="_images/aap-rulebook-activation-running.png" alt="Web App Rulebook Activation"></a>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Navigate to <strong>Templates</strong> and run the <strong>Break Apache</strong> Job Template.</p>
+</li>
+<li>
+<p>Once Apache is broken, run your <strong>HTTPD Fix</strong> Job Template to remediate it.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In a real-world scenario, you would most likely discover the error through <strong>ticket enrichment</strong> similar to Section 1 — where AI analyzes logs and tells you exactly what the issue is. Then you can use Automation coding assistant to quickly create a playbook to fix it. This creates strong guardrails on generative AI: you know exactly what the issue is, and exactly how you are attempting to fix it.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exercise_5_rhel_system_roles_pre_built"><a class="anchor" href="#_exercise_5_rhel_system_roles_pre_built"></a>Exercise 5: RHEL System Roles (Pre-Built)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_are_rhel_system_roles"><a class="anchor" href="#_what_are_rhel_system_roles"></a>What are RHEL System Roles?</h3>
+<div class="paragraph">
+<p><a href="https://access.redhat.com/articles/3050101" target="_blank" rel="noopener">RHEL System Roles</a> are a collection of <strong>officially supported Ansible roles and modules</strong> shipped with Red Hat Enterprise Linux. They provide a stable, consistent, and version-independent interface for managing common RHEL subsystems.</p>
+</div>
+<div class="paragraph">
+<p>System Roles cover areas like:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><code>rhel-system-roles.timesync</code></strong> — NTP/Chrony time synchronization configuration</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.network</code></strong> — Network interface and connection management</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.storage</code></strong> — Disk, partition, and filesystem management</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.selinux</code></strong> — SELinux policy and mode configuration</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.firewall</code></strong> — Firewall rules and zones</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.crypto_policies</code></strong> — System-wide cryptographic policies</p>
+</li>
+<li>
+<p><strong><code>rhel-system-roles.logging</code></strong> — Rsyslog and journal configuration</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Why use System Roles?</strong> System Roles abstract away the differences between RHEL major versions. A playbook using <code>rhel-system-roles.timesync</code> works the same on RHEL 8 and RHEL 9, even though the underlying NTP implementation may differ. This makes automation portable and future-proof.
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_configuring_ntp_with_system_roles"><a class="anchor" href="#_example_configuring_ntp_with_system_roles"></a>Example: Configuring NTP with System Roles</h3>
+<div class="paragraph">
+<p>For this exercise, a <strong>pre-built playbook</strong> using the <code>redhat.rhel_system_roles.timesync</code> role is already configured as a Job Template in Ansible Automation Platform called <strong>RHEL System Roles - Timesync</strong>. This playbook configures NTP time synchronization across your RHEL fleet.</p>
+</div>
+<div class="paragraph">
+<p>Here is the playbook content for reference:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+- name: RHEL System Roles - Timesync
+  hosts: all
+  become: true
+  vars:
+    timesync_ntp_provider: "{{ ntp_provider | default('chrony') }}"
+    timesync_ntp_servers:
+      - hostname: "{{ ntp_server_1 | default('0.pool.ntp.org') }}"
+        pool: "{{ ntp_server_1_pool | default(true) }}"
+        iburst: "{{ ntp_server_1_iburst | default(true) }}"
+      - hostname: "{{ ntp_server_2 | default('1.pool.ntp.org') }}"
+        pool: "{{ ntp_server_2_pool | default(true) }}"
+        iburst: "{{ ntp_server_2_iburst | default(true) }}"
+  roles:
+    - redhat.rhel_system_roles.timesync</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Source: <a href="https://github.com/ansible-tmm/aiops-summitlab/blob/feat/rhel-self-healing/playbooks/rhel_system_roles_timesync.yml" target="_blank" rel="noopener">rhel_system_roles_timesync.yml on GitHub</a></p>
+</div>
+<div class="paragraph">
+<p>This playbook:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Uses the <code>redhat.rhel_system_roles.timesync</code> role — no raw module calls needed</p>
+</li>
+<li>
+<p>Configures two NTP servers with sensible defaults and overridable survey variables</p>
+</li>
+<li>
+<p>Works identically across RHEL 8 and RHEL 9 because System Roles abstract the underlying implementation</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_1_explore_the_job_template_in_aap"><a class="anchor" href="#_step_1_explore_the_job_template_in_aap"></a>Step 1: Explore the Job Template in AAP</h3>
+<div class="paragraph">
+<p>Before using the agentic workflow, take a moment to see what is already configured in AAP.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Switch to the <strong>AAP</strong> tab in your lab interface.</p>
+</li>
+<li>
+<p>Navigate to <strong>Automation Execution</strong> → <strong>Templates</strong>.</p>
+</li>
+<li>
+<p>In the search/filter bar, type <code>time</code> to filter the list.</p>
+</li>
+<li>
+<p>Click on the <strong>RHEL System Roles - Timesync</strong> Job Template.</p>
+</li>
+<li>
+<p>Click the <strong>Survey</strong> tab.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-timesync-survey-tab.png" target="blank"><img src="_images/aap-timesync-survey-tab.png" alt="Survey tab on the Timesync Job Template"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>Notice that this Job Template is not just a playbook — it has a <strong>survey</strong> that prompts the operator for NTP provider, server hostnames, pool, and iburst settings. This is how AAP administrators create guardrails: the playbook logic is locked down, but specific parameters are exposed through a controlled form.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="6">
+<li>
+<p>Click <strong>Launch template</strong>.</p>
+</li>
+<li>
+<p>When prompted for <strong>Limit</strong>, type <code>node1</code> and click <strong>Next</strong>.</p>
+</li>
+<li>
+<p>Review the survey form that appears:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/aap-timesync-survey-fields.png" target="blank"><img src="_images/aap-timesync-survey-fields.png" alt="Timesync survey fields with NTP configuration options"></a>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see the default values — <code>0.pool.ntp.org</code> and <code>1.pool.ntp.org</code> — along with the NTP provider and iburst options. You are welcome to launch this manually if you&#8217;d like, but <strong>cancel out for now</strong> — in the next step, we will have Claude Code do this for us.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Why does the survey matter?</strong> Surveys are how AAP administrators define the boundaries of what an operator (or an AI agent) can change. The playbook itself is fixed and tested; only the survey variables are open for input. This means when an AI agent launches this template, it is constrained to the same guardrails as a human operator — it can only fill in the fields the administrator chose to expose.
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_2_launch_claude_code"><a class="anchor" href="#_step_2_launch_claude_code"></a>Step 2: Launch Claude Code</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open a terminal in code-server. Navigate to <strong>Terminal → New Terminal</strong> from the top menu bar.</p>
+</li>
+<li>
+<p>Type <code>claude</code> to start Claude Code.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_3_configure_ntp_via_the_agentic_workflow"><a class="anchor" href="#_step_3_configure_ntp_via_the_agentic_workflow"></a>Step 3: Configure NTP via the Agentic Workflow</h3>
+<div class="paragraph">
+<p>In the Claude Code chat, type the following prompt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">configure time.google.com and time.cloudflare.com as the NTP servers for node1 using AAP</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Claude Code will use the Ansible MCP server to find the <strong>RHEL System Roles - Timesync</strong> Job Template, read the survey spec to understand which parameters are required, fill in the survey variables with the requested NTP servers, and launch the job — all from a single natural language request.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="_images/claude-code-timesync-success.png" target="blank"><img src="_images/claude-code-timesync-success.png" alt="Claude Code configures NTP via RHEL System Roles"></a>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Notice what happened here.</strong> You saw the survey form in AAP — the AI agent sees the exact same thing through MCP. Claude Code discovered the Job Template, read its survey definition, understood the parameters, and filled them in correctly. The administrator&#8217;s guardrails are fully enforced: the AI can only supply values for the fields the survey exposes. It cannot modify the playbook, change the credentials, or bypass the inventory limit. This is how you keep AI on the rails that the administrator sets for that particular piece of automation.
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_step_4_optional_explore_other_pre_built_templates"><a class="anchor" href="#_step_4_optional_explore_other_pre_built_templates"></a>Step 4: (Optional) Explore Other Pre-Built Templates</h3>
+<div class="paragraph">
+<p>Your lab environment has several other Job Templates pre-configured in AAP. Take a few minutes to browse the <strong>Templates</strong> list and try launching one through Claude Code. For example, you might ask:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">What job templates are available in AAP?</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then pick one and ask Claude Code to run it. This is a great way to see how the agentic workflow handles different template types, surveys, and parameters.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Stretch goal — AI-generated System Roles playbooks</strong>: A known challenge in the Ansible community is getting AI code assistants to generate playbooks that use System Roles instead of raw module calls. This is an active area of work. In a future version of this lab, you may use a custom AI skill that instructs Automation coding assistant to prefer System Roles when generating RHEL automation.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_key_takeaways"><a class="anchor" href="#_key_takeaways"></a>Key Takeaways</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_where_do_good_playbooks_come_from"><a class="anchor" href="#_where_do_good_playbooks_come_from"></a>Where Do Good Playbooks Come From?</h3>
+<div class="paragraph">
+<p>This section demonstrated four distinct sources for production-quality Ansible Playbooks:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Source</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>CVE Remediation (Lightspeed)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Red Hat Lightspeed identifies vulnerabilities affecting your RHEL fleet and generates targeted playbooks to patch them. These are based on Red Hat&#8217;s Security Data API and errata.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Advisor Recommendations (Lightspeed)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lightspeed flags misconfigurations and best-practice violations (e.g., SELinux policy issues, configurations that won&#8217;t survive a reboot) and generates playbooks to fix them proactively.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>RHEL System Roles</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Officially supported, pre-built Ansible roles shipped with RHEL that provide a stable, version-independent interface for common configuration tasks (NTP, networking, storage, SELinux, firewall, and more).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>AI-assisted authoring (Automation coding assistant)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Developers use Automation coding assistant in the IDE to accelerate playbook creation. The AI generates a first draft, then a human reviews, refines, and validates before committing. This speeds up production of custom playbooks that go through a proper review process.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Each source has its place. Lightspeed and System Roles give you ready-made, trusted content. Automation coding assistant helps you create new playbooks faster — but the human review step is what makes them production-ready.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_human_in_the_loop_and_gatekeeping_with_aap"><a class="anchor" href="#_human_in_the_loop_and_gatekeeping_with_aap"></a>Human-in-the-Loop and Gatekeeping with AAP</h3>
+<div class="paragraph">
+<p>The real power of this workflow is not just generating playbooks — it&#8217;s the <strong>gatekeeping</strong>. Ansible Automation Platform provides the controls that ensure nothing reaches production without proper review:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Git as source of truth</strong> — every playbook is version-controlled, auditable, and reviewable before it enters AAP</p>
+</li>
+<li>
+<p><strong>Project sync</strong> — AAP only runs playbooks that have been committed and synced from a trusted Git repository</p>
+</li>
+<li>
+<p><strong>Job Templates with guardrails</strong> — credentials, inventory limits, and surveys ensure playbooks run against the right targets with the right parameters</p>
+</li>
+<li>
+<p><strong>Approval gates</strong> — workflows can include approval steps where a human signs off before execution proceeds</p>
+</li>
+<li>
+<p><strong>Human-in-the-loop by design</strong> — whether a playbook was generated by Lightspeed, written with AI assistance, or hand-crafted, the same review and approval process applies</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is the difference between "AI wrote it" and "AI wrote it, a human reviewed it, and AAP enforces that it runs safely." The IDE is where the review happens; AAP is where the gatekeeping happens.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_agentic_architecture"><a class="anchor" href="#_the_agentic_architecture"></a>The Agentic Architecture</h3>
+<div class="paragraph">
+<p>Throughout this lab, Claude Code connected to Ansible Automation Platform via the Ansible MCP server. Here is how the components fit together:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">code-server (VS Code in browser)
+    └── Claude Code (AI agent in terminal)
+            ↕ MCP Protocol
+        Ansible MCP Server          Red Hat Lightspeed MCP Server
+            ↕ REST API                      ↕ REST API
+    Ansible Automation Platform     Red Hat Lightspeed (console.redhat.com)
+    (Inventory, Job Templates,      (CVEs, Advisor, Remediation Playbooks)
+     Credentials, Jobs)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>Ansible MCP server</strong> exposes AAP capabilities (inventory, job templates, projects, jobs) as MCP tools. The <strong>Lightspeed MCP server</strong> exposes vulnerability and advisory data. Claude Code calls both behind the scenes when you ask questions in natural language — you don&#8217;t need to know the API endpoints.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_how_this_differs_from_traditional_workflows"><a class="anchor" href="#_how_this_differs_from_traditional_workflows"></a>How This Differs from Traditional Workflows</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Aspect</th>
+<th class="tableblock halign-left valign-top">Traditional (Labs 1-3)</th>
+<th class="tableblock halign-left valign-top">Agentic (This Lab)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Trigger</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Event (Instana, Filebeat, Winlogbeat)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human prompt in Claude Code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Decision Maker</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pre-defined workflow logic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AI agent with human approval</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Flexibility</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed workflow steps</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dynamic — Claude Code adapts to what it finds</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Approval</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Built into workflow (optional)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always required — Claude Code asks before acting</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Best For</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Known, repeatable scenarios</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ad-hoc investigation and remediation</p></td>
+</tr>
+</tbody>
+</table>
+<div class="quoteblock">
+<blockquote>
+💡 <strong>Think of it this way</strong>: Traditional automation is like a train on rails — fast and reliable, but it only goes where tracks exist. Agentic automation is like a GPS-guided driver — it can navigate new routes, but you&#8217;re sitting in the passenger seat and can say "stop" at any time.
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_complete"><a class="anchor" href="#_complete"></a>Complete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You have completed Section 4 - Red Hat Lightspeed: CVE and Advisor Remediation. You used multiple approaches to generate, review, and deploy remediation playbooks — all through a human-in-the-loop workflow where AI proposes and you decide.</p>
+</div>
+<div class="paragraph">
+<p>In the next section, you will see the <strong>opposite approach</strong>: AI agents that discover your existing automation and orchestrate it autonomously, from an interactive assistant through to a fully event-driven agent.</p>
+</div>
+<div class="paragraph">
+<p>Continue to <a href="module-09.html" class="xref page">Section 5: AI-Driven Incident Response with MCP</a>.</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="module-06.html" class="query-params-link">3. Windows Events and AI-Driven Ticketing</a></span>
+  <span class="next"><a href="module-09.html" class="query-params-link">5. AI Agents and AAP via MCP</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>  </div>
+</main>
+</div>
+<footer class="footer">
+  <a href="https://demo.redhat.com" target="_blank" class="poweredBy"><p>Powered by</p><div class="labInfo_poweredBy" style="display: block; width: 260px;"><svg class="labInfo_poweredByLogo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1508.5 178.739"><g fill="#111"><path d="M316.6 63.2v-56H342a21.279 21.279 0 0 1 7.8 1.3 18.111 18.111 0 0 1 5.9 3.5 15.577 15.577 0 0 1 5 11.8 15.051 15.051 0 0 1-3.1 9.5 16.836 16.836 0 0 1-8.4 5.8l12.5 24.1h-9.3l-11.6-23H325v23Zm24.7-48.6H325v18.7h16.3q5.25 0 8.1-2.7a8.7 8.7 0 0 0 2.8-6.6 8.7 8.7 0 0 0-2.8-6.6c-1.8-1.9-4.5-2.8-8.1-2.8ZM364.1 42.8a20.674 20.674 0 0 1 1.6-8.2 20.288 20.288 0 0 1 4.3-6.7 19.92 19.92 0 0 1 6.5-4.5 19.718 19.718 0 0 1 8-1.6 18.463 18.463 0 0 1 7.8 1.6 18.677 18.677 0 0 1 6.2 4.5 20.927 20.927 0 0 1 4.1 6.8 23.2 23.2 0 0 1 1.5 8.4v2.3H372a13.822 13.822 0 0 0 4.6 8.4 13.6 13.6 0 0 0 9.1 3.3 15.553 15.553 0 0 0 5.7-1 12.858 12.858 0 0 0 4.6-2.6l5.1 5a25.983 25.983 0 0 1-7.4 4.1 24.69 24.69 0 0 1-8.4 1.3 21.306 21.306 0 0 1-8.4-1.6 22.763 22.763 0 0 1-6.8-4.4 20.788 20.788 0 0 1-4.5-6.7 23.2 23.2 0 0 1-1.5-8.4Zm20.2-14.2a11.527 11.527 0 0 0-8 3 13.046 13.046 0 0 0-4.2 7.8h24.2a13.091 13.091 0 0 0-4.2-7.8 11.106 11.106 0 0 0-7.8-3ZM443.1 63.2v-3.8a19.448 19.448 0 0 1-5.8 3.3 18.924 18.924 0 0 1-6.7 1.2 19.824 19.824 0 0 1-14.6-6.1 22.268 22.268 0 0 1-4.4-6.7 21.812 21.812 0 0 1 0-16.4A20.534 20.534 0 0 1 416 28a19.335 19.335 0 0 1 6.6-4.5 20.334 20.334 0 0 1 8.2-1.6 20.7 20.7 0 0 1 6.6 1 19.415 19.415 0 0 1 5.7 3V7.2l8-1.8v57.8Zm-25.2-20.4a13.718 13.718 0 0 0 4 10.1 13.45 13.45 0 0 0 9.8 4.1 14.956 14.956 0 0 0 6.4-1.3 15.954 15.954 0 0 0 4.9-3.6V33.6a14.988 14.988 0 0 0-4.9-3.5 15.271 15.271 0 0 0-6.4-1.3 13.423 13.423 0 0 0-9.9 4 13.806 13.806 0 0 0-3.9 10ZM478.1 63.2v-56h8.4v24h29.8v-24h8.4v56h-8.4V38.8h-29.8v24.4ZM547.2 64a16.483 16.483 0 0 1-10.8-3.5 11.037 11.037 0 0 1-4.2-8.9 10.375 10.375 0 0 1 4.7-9.2 20.76 20.76 0 0 1 11.8-3.2 27.841 27.841 0 0 1 5.8.6 27.374 27.374 0 0 1 5.3 1.6v-4.3a8.143 8.143 0 0 0-2.6-6.5 11.452 11.452 0 0 0-7.4-2.2 20.788 20.788 0 0 0-6 .9 34.616 34.616 0 0 0-6.6 2.6l-3-6a54.169 54.169 0 0 1 8.4-3.1 33.18 33.18 0 0 1 8.3-1.1c5.2 0 9.3 1.3 12.2 3.8s4.4 6.1 4.4 10.8v27h-7.8v-3.5a19.441 19.441 0 0 1-5.8 3.2 23.54 23.54 0 0 1-6.7 1Zm-7.3-12.6a5.646 5.646 0 0 0 2.6 4.8 11.193 11.193 0 0 0 6.6 1.8 16.256 16.256 0 0 0 5.9-1 14.449 14.449 0 0 0 4.9-2.9V47a19.778 19.778 0 0 0-4.8-1.8 24.933 24.933 0 0 0-5.7-.6 11.859 11.859 0 0 0-6.8 1.8 5.728 5.728 0 0 0-2.7 5ZM580.6 53.2v-24H572v-6.7h8.6V12.1l7.9-1.9v12.3h12v6.7h-12v22.1a5.94 5.94 0 0 0 1.4 4.4c.9.9 2.5 1.3 4.6 1.3a23.637 23.637 0 0 0 3-.2 10.857 10.857 0 0 0 2.8-.8v6.7a19.28 19.28 0 0 1-3.8.9 27.484 27.484 0 0 1-3.8.3c-3.9 0-7-.9-9-2.8-2-1.7-3.1-4.4-3.1-7.9Z"></path></g><path d="M127 90.2c12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4L149.8 37c-1.7-7.1-3.2-10.3-15.7-16.6-9.7-5-30.8-13.1-37.1-13.1-5.8 0-7.5 7.5-14.4 7.5-6.7 0-11.6-5.6-17.9-5.6-6 0-9.9 4.1-12.9 12.5 0 0-8.4 23.7-9.5 27.2a4.216 4.216 0 0 0-.3 1.9c0 9.2 36.3 39.4 85 39.4Zm32.5-11.4c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3C21.8 58.8 0 61.8 0 81c0 31.5 74.6 70.3 133.7 70.3 45.3 0 56.7-20.5 56.7-36.6-.1-12.8-11-27.3-30.9-35.9Z" fill="#e00"></path><path d="M159.5 78.8c1.7 8.2 1.7 9.1 1.7 10.1 0 14-15.7 21.8-36.4 21.8-46.8 0-87.7-27.4-87.7-45.5a17.535 17.535 0 0 1 1.5-7.3l3.7-9.1a4.877 4.877 0 0 0-.3 2c0 9.2 36.3 39.4 85 39.4 12.5 0 30.6-2.6 30.6-17.5a12.678 12.678 0 0 0-.3-3.4Z"></path><path d="M253.5 158.7a2.22 2.22 0 0 1-2.2-2.2V2.2a2.2 2.2 0 0 1 4.4 0v154.2a2.242 2.242 0 0 1-2.2 2.3Z" fill="#111"></path><text data-name="Demo Platform" transform="translate(1186 149)" fill="#111" font-size="82" font-family="'RedHatDisplay', 'Overpass', overpass, helvetica, arial, sans-serif" font-weight="700"><tspan x="-877.892" y="0">Demo Platform</tspan></text></svg></div></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
